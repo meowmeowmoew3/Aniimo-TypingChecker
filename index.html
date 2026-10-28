@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aniimo Weakness Checker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#1b2133; --muted:#707a8c; --line:#d9e0ea;
+  --navy:#1d2438; --sky:#6fd3f5; --link:#1fa2e0;
+  --pink:#f5a8d8; --lilac:#b7a1f7;
+  --bad:#b42318; --good:#15803d; --mid:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+
+header{
+  background:
+    radial-gradient(circle,#dfe6ef 1px,transparent 1.2px) 0 0/10px 10px,
+    linear-gradient(#fff,#fafcfe);
+  padding:calc(14px + env(safe-area-inset-top)) 20px 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--pink),var(--lilac))}
+.wordmark{font-weight:800;font-style:italic;font-size:1.7rem;letter-spacing:.02em;color:var(--navy);line-height:1}
+.pill{display:inline-block;background:var(--navy);color:var(--sky);font-weight:700;
+  font-size:.9rem;padding:9px 18px;border-radius:999px;text-decoration:none;
+  border:2px solid #323b58;white-space:nowrap}
+.pill:hover{background:#2a3350}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+
+main{max-width:680px;margin:0 auto;padding:22px 20px 56px}
+.crumbs{font-size:.92rem;color:var(--muted);margin-bottom:18px}
+.crumbs a{color:inherit;text-decoration:none}
+.crumbs a:hover{color:var(--link)}
+.crumbs .here{color:var(--link)}
+.crumbs .sep{margin:0 6px;color:#b6bfcc}
+h1{font-size:2rem;line-height:1.2;font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
+.date{color:var(--muted);margin:0 0 18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+
+.banner{border-radius:6px;min-height:150px;margin-bottom:22px;display:flex;
+  flex-direction:column;justify-content:flex-end;padding:18px 20px;color:#fff;
+  background:
+    radial-gradient(circle at 15% 25%,rgba(255,255,255,.55) 0 4%,transparent 4.5%),
+    radial-gradient(circle at 82% 18%,rgba(255,255,255,.4) 0 6%,transparent 6.5%),
+    radial-gradient(circle at 68% 70%,rgba(255,255,255,.3) 0 3%,transparent 3.5%),
+    linear-gradient(135deg,#8fe3f2 0%,#4cb8e6 45%,#7d8cf0 100%)}
+.banner b{font-size:1.5rem;font-style:italic;font-weight:800;line-height:1.15;
+  text-shadow:0 2px 8px rgba(30,60,140,.45);text-transform:uppercase}
+.banner span{font-style:italic;font-weight:600;margin-top:6px;text-shadow:0 1px 6px rgba(30,60,140,.45)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h2{font-size:.98rem;margin:0 0 10px;font-weight:700}
+.card h2 small{font-weight:500;color:var(--muted)}
+
+.ico{flex:none;display:inline-block;vertical-align:middle}
+.av{width:36px;height:36px;border-radius:50%;object-fit:contain;flex:none;background:#e6edf5;
+  display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.95rem}
+.av.lg{width:52px;height:52px}
+
+.search{position:relative}
+input[type=search]{width:100%;font:inherit;padding:11px 16px;border-radius:999px;border:2px solid var(--line);
+  background:#f6f8fb;color:var(--ink)}
+input[type=search]:focus{border-color:var(--link);outline:none}
+.results{list-style:none;margin:8px 0 0;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.results:empty{display:none}
+.results button{width:100%;text-align:left;font:inherit;background:var(--card);color:var(--ink);border:0;
+  border-bottom:1px solid var(--line);padding:8px 14px;cursor:pointer;display:flex;gap:12px;align-items:center}
+.results li:last-child button{border-bottom:0}
+.results button:hover,.results button:focus-visible{background:#eaf6fc}
+.results .txt{flex:1;display:flex;flex-direction:column;line-height:1.3}
+.results .el{color:var(--muted);font-size:.82rem}
+.picked{display:flex;align-items:center;gap:12px;margin-top:12px;background:#eaf6fc;border-radius:12px;padding:10px 14px}
+.picked .txt{flex:1;line-height:1.3}
+.picked .txt small{color:var(--muted)}
+.picked button{font:inherit;font-weight:600;color:var(--link);background:none;border:0;cursor:pointer}
+.formrow{margin-top:12px}
+.formrow p{margin:0 0 6px;font-size:.85rem;color:var(--muted);font-weight:600}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+button.chip{font:inherit;font-weight:600;font-size:.93rem;border:2px solid var(--line);
+  background:#f6f8fb;color:var(--ink);padding:6px 14px 6px 8px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px}
+button.chip[aria-pressed="true"]{background:var(--navy);border-color:#323b58;color:var(--sky)}
+button.chip.sm{font-size:.82rem;padding:3px 12px}
+button.chip.sm small{opacity:.75}
+
+.target{font-size:1.3rem;font-weight:800;margin:26px 0 10px;display:flex;align-items:center;gap:12px}
+.target small{font-weight:500;color:var(--muted);font-size:.9rem}
+
+/* radar cards */
+.radar{padding:18px 16px 14px;border-radius:22px;box-shadow:0 4px 18px rgba(40,60,100,.06)}
+.rhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.rhead h2{font-size:1.5rem;margin:0;font-weight:800}
+.rbadges{display:flex;gap:14px;align-items:center;font-weight:600;font-size:.95rem}
+.rbadges span{display:inline-flex;align-items:center;gap:6px}
+.rdesc{color:#475069;margin:8px 0 0;font-size:.95rem}
+.rdesc b.bad{color:var(--bad)} .rdesc b.good{color:var(--good)}
+.radar svg.chart{width:100%;height:auto;display:block;margin:6px auto 0;max-width:460px}
+.legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-weight:600;color:#475069;font-size:.92rem}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;border:3px solid;vertical-align:-1px;margin-right:6px}
+
+.sec{margin:28px 0 8px;font-size:1.15rem;font-weight:800}
+.hint{color:var(--muted);font-size:.88rem;margin:0 0 10px}
+.bring{display:grid;gap:8px;margin-top:10px}
+.mon{display:flex;align-items:center;gap:12px;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:8px 14px;font-size:.95rem}
+.mon .txt{flex:1;line-height:1.3}
+.mon .meta{color:var(--muted);font-size:.82rem;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.mon .mx{font-weight:800;color:#e8741f;white-space:nowrap}
+.mon .mx.top{color:#c62f3b}
+.mon .mx.good{color:var(--good)}
+.empty{color:var(--muted);margin:0}
+
+details{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+summary{cursor:pointer;font-weight:700}
+.scroll{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;font-size:.8rem;min-width:100%}
+th,td{border:1px solid var(--line);padding:5px 6px;text-align:center}
+th:first-child{text-align:left}
+td.s{background:#fde3cf;font-weight:700}
+td.w{background:#d8f1e3}
+.note{color:var(--muted);font-size:.85rem;margin-top:24px}
+code{background:#e3e9f1;padding:1px 5px;border-radius:4px}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 32px}
+footer a{color:var(--link)}
+</style>
+</head>
+<body>
+<header>
+  <span class="wordmark">ANIIMO</span>
+  <a class="pill" href="https://aniimo.com" target="_blank" rel="noopener noreferrer">Official site</a>
+</header>
+
+<main>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="https://aniimo.com" target="_blank" rel="noopener noreferrer">Home</a><span class="sep">|</span>Tools<span class="sep">|</span><span class="here">Weakness Checker</span>
+  </nav>
+
+  <h1>Element Weakness Checker</h1>
+  <p class="date">Season 1: Departure with the Wind</p>
+
+  <div class="banner" role="img" aria-label="Decorative banner">
+    <b>Know your matchups</b>
+    <span>Search an Aniimo, pick its form, find what beats it</span>
+  </div>
+
+  <section class="card">
+    <h2>Find an Aniimo</h2>
+    <div class="search">
+      <input id="q" type="search" placeholder="Type a name, like Scorchhowl" autocomplete="off" aria-label="Search Aniimo by name">
+      <ul class="results" id="results"></ul>
+    </div>
+    <div id="picked"></div>
+  </section>
+
+  <section class="card"><h2>Or pick elements <small>(2nd is optional)</small></h2>
+    <div class="chips" id="p1"></div>
+    <div class="chips" id="p2" style="margin-top:10px"></div>
+  </section>
+
+  <div id="out"></div>
+
+  <details>
+    <summary>Full chart (attacker → defender)</summary>
+    <div class="scroll"><table id="chart"></table></div>
+  </details>
+
+  <p class="note">
+    Multipliers: 1.6× super effective, 1× neutral, 0.625× resisted. Dual types multiply both
+    elements together. The element chart is from MetaBot. Aniimo, forms and form elements come
+    from the game files, so the list includes entries that may not be obtainable yet. Roles and
+    stats are community figures and are blank for newer entries. The game calls Electric
+    “Lightning,” Rock “Earth,” and Holy “Light.” Edit <code>CHART</code> or <code>ROSTER</code>
+    in this file to correct anything.
+  </p>
+</main>
+<footer>Unofficial fan tool. Not affiliated with Polaris Institute or Aniimo.
+  <a href="https://aniimo.com" target="_blank" rel="noopener noreferrer">aniimo.com</a></footer>
+
+<script>
+const TYPES = ["Fire","Water","Grass","Lightning","Ice","Earth","Wind","Light","Dark"];
+const COLORS = {Fire:"#ef4444",Water:"#4f9be8",Grass:"#10b981",Lightning:"#e2c01c",Ice:"#3fc1d9",
+  Earth:"#8c6a42",Wind:"#22b8a8",Light:"#f5a623",Dark:"#8b5cf6"};
+const S=1.6,R=0.625,N=1;
+const CHART = {
+  Fire:     [R,R,S,N,S,R,N,R,N],
+  Water:    [S,R,R,N,R,S,N,R,N],
+  Grass:    [R,S,R,N,N,S,N,R,N],
+  Lightning:[N,S,N,R,R,R,S,N,N],
+  Ice:      [R,S,N,S,R,R,N,N,N],
+  Earth:    [S,R,R,N,S,R,N,N,R],
+  Wind:     [N,N,S,R,N,N,R,N,S],
+  Light:    [N,N,N,R,N,N,S,R,S],
+  Dark:     [N,R,S,S,N,N,R,S,N]
+};
+const mult = (atk, def) => CHART[atk][TYPES.indexOf(def)];
+
+/* ---------- element badges (drawn) ---------- */
+const GLYPH = {
+ Fire:'<path d="M12 3c1 3 4.2 4.7 4.2 8.7a4.2 4.2 0 0 1-8.4 0c0-1.6.6-2.7 1.6-3.7.2 1 .7 1.7 1.5 2C10.4 7.6 11 5.4 12 3z" fill="#fff"/>',
+ Water:'<path d="M12 3C9.3 7 6.6 10.2 6.6 14a5.4 5.4 0 0 0 10.8 0C17.4 10.2 14.7 7 12 3z" fill="#fff"/>',
+ Grass:'<path d="M5 19C5 10 10 5 19 5c0 9-5 14-13 14l-2 2z" fill="#fff"/>',
+ Lightning:'<path d="M13.5 2.5L6 13.5h5l-1 8L18 10h-5.2z" fill="#fff"/>',
+ Ice:'<g stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v18M4.4 7.5l15.2 9M4.4 16.5l15.2-9"/></g>',
+ Earth:'<path d="M2.5 19L9 7.5l4 6.5 2.6-3.8L21.5 19z" fill="#fff"/>',
+ Wind:'<g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4 9h8.5a2.8 2.8 0 1 0-2.8-2.8M4 14h12a2.8 2.8 0 1 1-2.8 2.8M4 19h5"/></g>',
+ Light:'<g stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"><circle cx="12" cy="12" r="3.8" fill="#fff"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></g>',
+ Dark:'<path d="M15.5 3.2a9 9 0 1 0 5.3 12.9A7.2 7.2 0 0 1 15.5 3.2z" fill="#fff"/>'
+};
+const badge = t => `<circle cx="18" cy="18" r="18" fill="${COLORS[t]}"/><g transform="translate(6 6)">${GLYPH[t]}</g>`;
+const elIco = (t,s=20) => `<svg class="ico" width="${s}" height="${s}" viewBox="0 0 36 36" aria-hidden="true">${badge(t)}</svg>`;
+
+/* ---------- Aniimo portraits: icons/aniimo/<id>.webp, initial badge if missing ---------- */
+function iconFail(img){
+  const span = document.createElement("span");
+  span.className = "av" + (img.classList.contains("lg")?" lg":"");
+  span.style.background = COLORS[img.dataset.t]; span.textContent = img.dataset.i;
+  img.replaceWith(span);
+}
+const portrait = (a, file, big) => file
+  ? `<img class="av${big?" lg":""}" src="icons/aniimo/${file}.webp" alt="" loading="lazy" data-t="${a.el[0]}" data-i="${a.name[0]}" onerror="iconFail(this)">`
+  : `<span class="av${big?" lg":""}" style="background:${COLORS[a.el[0]]}">${a.name[0]}</span>`;
+
+/* Name~alias | elements | role | attribute total | portrait id | forms (Name:elements:portrait id;...)
+   Roles: D=DPS B=Break S=Support H=Heal R=Regen ?=unknown */
+const ROLES = {D:"DPS",B:"Break",S:"Support",H:"Heal",R:"Regen","?":"Role n/a"};
+const ROSTER = `Celestis|Dark|D|429|10011|
+Stellarys|Dark|D|505|10012|Rainstorm:Water,Dark:1001201;Prismana:Ice,Dark:1001202
+Helmut|Dark|B|339|10021|Snowfield:Ice,Dark:1002101;Mountain Woods:Dark:1002102
+Helmwhelp|Wind|B|489|10022|Mountain:Wind:1002201
+Helgon|Wind|B|543|10023|Mountain:Wind:1002301
+Jawling|Wind|B|407|10024|Mountain:Wind:1002401
+Infergon|Fire|D|505|10025|Prismana:Fire,Wind:1002503
+Pawney|Dark|D|505|10026|Snowfield:Ice,Dark:1002601;Mountain Woods:Dark:1002602;Prismana:Dark:1002603
+Rookey|Dark|B|540|10027|Snowfield:Ice,Dark:1002701;Mountain Woods:Dark:1002702
+Wisptis|Dark|D|423|10031|Forest:Grass,Dark:1003101;Highland:Fire,Dark:1003103
+Ignitis|Dark|D|505|10032|Forest:Grass,Dark:1003201;Prismana:Fire,Dark:1003202;Highland:Fire,Dark:1003203
+Fulmintis|Lightning|D|520|10033|Prismana:Lightning,Light:1003305
+Skippy|Water|H|402|10041|Sea of Flowers:Water:1004101;Snowfield:Ice,Water:1004102
+Pranky|Water|H|482|10042|Sea of Flowers:Water:1004201;Snowfield:Ice,Water:1004202
+Glacy|Ice,Water|H|535|10043|Sea of Flowers:Ice,Water:1004301;Snowfield:Ice,Water:1004302;Prismana:Water,Light:1004303
+Leafy|Water,Grass|R|535|10045|
+Emberpup|Fire|D|382|10051|Highland:Fire,Earth:1005101;Mountain Woods:Fire:1005104
+Flameruff|Fire|D|456|10052|Highland:Fire,Earth:1005201;Mountain Woods:Fire:1005204
+Scorchhowl|Fire|D|511|10053|Highland:Fire,Earth:1005301;Thunderstorm:Lightning,Fire:1005302;Prismana:Fire:1005303;Mountain Woods:Fire:1005304
+Inferlupa|Fire,Dark|B|541|10055|Prismana:Fire,Dark:1005503
+Besauce|Lightning|R|538|10122|
+Bonesky|Ice|D|377|10131|Nighttime:Ice,Dark:1013102
+Fenrier|Ice|D|453|10132|Nighttime:Ice,Dark:1013202
+Glynsera|Ice|D|512|10133|Prismana:Ice,Light:1013301;Nighttime:Ice,Dark:1013302
+Bulbly|Lightning|S|404|10141|
+Veilfloat|Lightning|S|473|10142|
+Luminelle|Lightning|S|515|10143|Rainstorm:Water,Lightning:1014301;Prismana:Lightning,Light:1014302
+Budclaw|Grass,Earth|B|454|10161|Mudflat:Earth:1016101;Beach:Earth:1016102;Bay:Earth:1016103
+Shrubclaw~Scrubclaw|Grass,Earth|B|550|10162|Mudflat:Earth:1016201;Beach:Earth:1016202;Bay:Earth:1016203
+Geoclaw|Ice|B|550|10163|
+Susuta|Water|B|411|10171|Nighttime:Water:1017101
+Popota|Water|B|471|10172|Nighttime:Water:1017201
+Piopiota|Water|S|522|10173|Nighttime:Water,Dark:1017301
+Panpanta|Water|B|545|10174|Nighttime:Water:1017401;Prismana:Water:1017402
+Chirpi|Wind|S|452|10181|Beach:Water,Wind:1018101;Highland:Grass,Wind:1018103
+Tromber|Wind|S|531|10184|Beach:Water,Wind:1018401;Highland:Grass,Wind:1018403
+Cornet|Wind|D|509|10185|Beach:Water,Wind:1018501;Prismana:Lightning,Wind:1018502;Highland:Grass,Wind:1018503
+Tubster|Wind|B|550|10187|Beach:Water,Wind:1018701;Highland:Grass,Wind:1018703
+Shelly|Water|D|382|10191|
+Sheldon|Water|D|458|10192|
+Sherro|Water|D|509|10194|Thunderstorm:Water,Lightning:1019401;Prismana:Water,Light:1019402
+Hummin|Grass|B|467|10201|Mountain:Grass:1020101
+Hexxin~Witchin|Grass,Dark|R|542|10203|Mountain:Grass,Dark:1020301;Prismana:Grass,Dark:1020302
+Tuckin|Grass|B|550|10207|Mountain:Grass,Earth:1020701
+Iris|Grass|D|397|10211|Highland:Grass:1021101;Forest:Grass:1021102;Grassland:Grass:1021103;Prismana:Grass:1021104;Plateau:Grass:1021105;Mountain Woods:Grass:1021106
+Irisal|Grass|D|504|10212|Highland:Grass:1021201;Forest:Grass:1021202;Grassland:Grass:1021203;Prismana:Grass:1021204;Plateau:Grass:1021205;Mountain Woods:Grass:1021206
+Bolty|Lightning|B|450|10221|Mountain Woods:Lightning:1022102
+Blazen|Lightning|B|530|10222|Prismana:Lightning,Dark:1022201;Mountain Woods:Lightning:1022202
+Flutternym|Wind|H|437|10231|Sea of Flowers:Grass,Wind:1023101;Nighttime:Wind,Dark:1023102;Mountain Woods:Earth,Wind:1023103
+Gracewing|Wind|H|532|10232|Sea of Flowers:Grass,Wind:1023201;Nighttime:Wind,Dark:1023202;Mountain Woods:Earth,Wind:1023203
+Nimbi|Wind|S|451|10261|Rainstorm:Lightning,Wind:1026101;Cloudmist:Wind:1026102;Plateau:Ice,Wind:1026105
+Turbo|Wind|S|518|10262|Rainstorm:Lightning,Wind:1026201;Cloudmist:Wind:1026202;Prismana:Wind,Dark:1026204;Plateau:Ice,Wind:1026205
+Dreaple|Dark|S|520|10263|
+Pebbling|Earth|B|412|10281|
+Lavazar|Fire,Earth|B|485|10282|
+Magmarex|Fire,Earth|B|539|10283|Prismana:Fire,Dark:1028301
+Geodeback|Earth|B|486|10284|
+Minespine|Earth|B|540|10285|
+Fentuft|Lightning|D|429|10291|
+Fenmane|Lightning|D|505|10293|Prismana:Lightning,Light:1029301
+Budsquire|Grass|D|428|10321|Towerwood:Grass:1032103
+Thornblade|Grass|D|509|10323|Thunderstorm:Lightning,Grass:1032301;Prismana:Water,Grass:1032302;Towerwood:Grass:1032303
+Melloblum|Grass|S|517|10324|Prismana:Grass,Light:1032402
+Sparki|Fire|R|435|10331|Highland:Fire:1033101;Forest:Fire:1033102;Sea of Flowers:Fire:1033103
+Flamerion|Fire|R|517|10333|Highland:Fire:1033301;Forest:Fire:1033302;Sea of Flowers:Fire:1033303
+Dewy|Dark|S|441|10351|
+Fragrancier|Dark|S|519|10352|
+Helion|Light|D|514|10361|
+Soleon|Light|?|0|10363|
+Lunara|Light|D|514|10371|
+Fennelun|Light|?|0|10373|
+Reefish|Earth,Water|?|0|10381|Rainstorm:Earth:1038103
+Coraliz|Earth,Water|?|0|10383|Rainstorm:Earth:1038303
+Jabster|Water|?|0|10403|
+Malangel|Ice|?|0|10421|
+Malevsera|Ice|?|0|10423|
+Cozite|Earth|S|448|10431|
+Bailite|Earth|S|514|10433|
+Eko|Wind|S|427|10441|
+Eklue|Wind|S|510|10443|
+Baleetle|Earth|D|437|10451|Snowfield:Ice,Earth:1045101
+Waleetle|Earth|D|516|10453|Snowfield:Ice,Earth:1045301;Prismana:Earth,Dark:1045302
+Bouldus|Earth|S|516|10454|Snowfield:Ice,Earth:1045401
+Pomegg|Grass|B|455|10471|Snowfield:Ice,Grass:1047101;Highland:Grass:1047102;Sea of Flowers:Grass:1047103
+Dazmand|Lightning|S|522|10474|
+Pomawk|Grass|B|540|10475|Snowfield:Ice,Grass:1047501;Highland:Grass:1047502;Sea of Flowers:Grass:1047503
+Fahloo|Water|R|459|10481|
+Erlath|Water|R|540|10483|
+Cubbo|Earth|D|435|10501|
+Grizbo|Earth|D|506|10503|Prismana:Earth,Dark:1050301
+Squarrel|Fire|B|455|10511|
+Squashel|Fire|B|548|10512|
+Bubbeep|Grass,Water|?|0|10581|
+Glameep|Grass,Water|?|0|10583|Prismana:Grass,Dark:1058301
+Popapus|Water|?|0|10621|
+Gachapus|Water|?|0|10623|
+Sparkelf|Fire|?|0|69993|Prismana:Fire:6999301
+Somniwing|Wind,Grass|R|538||
+Little Fire Spirit|Fire|S|517||`.trim().split("\n").map(l => {
+  const [n, el, role, total, file, forms] = l.split("|");
+  const [name, alias] = n.split("~");
+  return {name, alias: alias||"", el: el.split(","), role, total: +total, file,
+    forms: (forms||"").split(";").filter(Boolean).map(f => { const [fn, fe, ff] = f.split(":"); return {n: fn+" Form", el: fe.split(","), file: ff}; })};
+});
+const variantsOf = a => [{n:"Basic Form", el:a.el, file:a.file}, ...a.forms];
+
+let t1=null, t2=null, picked=null, formIdx=0, roleFilter="ALL";
+
+/* ---------- element picker ---------- */
+function chip(type, group, onPick){
+  const b = document.createElement("button");
+  b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
+  b.innerHTML = `${elIco(type,22)}${type}`;
+  b.onclick = () => onPick(type); b.dataset.type = type;
+  group.appendChild(b);
+}
+function sync(){
+  document.querySelectorAll("#p1 .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.type===t1));
+  document.querySelectorAll("#p2 .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.type===t2));
+  const pk = document.getElementById("picked");
+  if(picked){
+    const vs = variantsOf(picked);
+    pk.innerHTML = `<div class="picked">${portrait(picked,vs[formIdx].file,true)}<span class="txt"><b>${picked.name}</b><br><small>${ROLES[picked.role]}${picked.total?` · ${picked.total} stats`:""}</small></span><button type="button" id="clr">Clear</button></div>` +
+      (vs.length>1 ? `<div class="formrow"><p>Form</p><div class="chips" id="forms">${vs.map((v,i)=>
+        `<button type="button" class="chip sm" data-i="${i}" aria-pressed="${i===formIdx}">${v.n.replace(" Form","")} <small>${v.el.join("/")}</small></button>`).join("")}</div></div>` : "");
+    document.getElementById("clr").onclick = () => { picked=null; t1=t2=null; sync(); };
+    document.querySelectorAll("#forms .chip").forEach(b => b.onclick = () => { formIdx=+b.dataset.i; applyForm(); });
+  } else pk.innerHTML = "";
+  render();
+}
+function applyForm(){ const v = variantsOf(picked)[formIdx]; t1=v.el[0]; t2=v.el[1]||null; sync(); }
+TYPES.forEach(t => chip(t, document.getElementById("p1"), v => { picked=null; t1=(t1===v)?null:v; if(t1===t2) t2=null; sync(); }));
+TYPES.forEach(t => chip(t, document.getElementById("p2"), v => { picked=null; t2=(t2===v)?null:v; if(t1===t2) t1=null; sync(); }));
+
+/* ---------- creature search ---------- */
+const q = document.getElementById("q"), results = document.getElementById("results");
+function showResults(){
+  const s = q.value.trim().toLowerCase();
+  results.innerHTML = "";
+  if(!s) return;
+  const m = a => a.name.toLowerCase().includes(s) || (a.alias && a.alias.toLowerCase().includes(s));
+  const hits = ROSTER.filter(m)
+    .sort((a,b)=> b.name.toLowerCase().startsWith(s) - a.name.toLowerCase().startsWith(s) || a.name.localeCompare(b.name)).slice(0,6);
+  if(!hits.length){ results.innerHTML = `<li><button type="button" disabled>No match. Use the element buttons instead.</button></li>`; return; }
+  hits.forEach(a => {
+    const li = document.createElement("li");
+    li.innerHTML = `<button type="button">${portrait(a,a.file)}<span class="txt"><span>${a.name}${a.alias?` <small class="el">(${a.alias})</small>`:""}</span><span class="el">${a.el.join(" / ")}${a.forms.length?` · ${a.forms.length} form${a.forms.length>1?"s":""}`:""}</span></span></button>`;
+    li.firstChild.onclick = () => pick(a);
+    results.appendChild(li);
+  });
+}
+function pick(a){ picked=a; formIdx=0; q.value=""; results.innerHTML=""; applyForm(); }
+q.addEventListener("input", showResults);
+q.addEventListener("keydown", e => { if(e.key==="Enter"){ const b = results.querySelector("button:not([disabled])"); if(b) b.click(); }});
+
+/* ---------- radar charts ---------- */
+const ORDER = ["Water","Light","Dark","Wind","Earth","Grass","Lightning","Ice","Fire"]; // clockwise from top
+const fmtM = m => Math.abs(m-0.625)<1e-6 ? "0.625" : String(Math.round(m*100)/100);
+const against = (atkEls, defEls) => Math.max(...atkEls.map(e => defEls.reduce((p,d)=>p*mult(e,d),1)));
+const joinList = a => a.length<2 ? a.join("") : a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+
+/* mode "def": higher = worse for the target (red); mode "atk": higher = better (green) */
+function radar(mode, vals, defs, who){
+  const CX=200, CY=215, RM=95, RI=158, maxM = mode==="def" ? 2.56 : 1.6;
+  const f = m => 0.55 + 0.45*Math.max(-1, Math.min(1, Math.log(m)/Math.log(maxM)));
+  const P = (i,r) => { const a=i*Math.PI*2/9; return [CX+r*Math.sin(a), CY-r*Math.cos(a)]; };
+  const poly = fr => ORDER.map((_,i)=>P(i,RM*fr).map(n=>n.toFixed(1)).join(",")).join(" ");
+  const hi = mode==="def" ? "#c2410c" : "#15803d", lo = mode==="def" ? "#15803d" : "#c2410c";
+  const hiTxt = mode==="def" ? "var(--bad)" : "var(--good)", loTxt = mode==="def" ? "var(--good)" : "var(--bad)";
+  const fill = mode==="def" ? "rgba(239,68,68,.22)" : "rgba(22,163,74,.22)", stroke = mode==="def" ? "#ef4444" : "#16a34a";
+  let svg = `<svg class="chart" viewBox="0 0 400 410" role="img" aria-label="${mode==="def"?"Defence":"Attack"} radar chart">`;
+  svg += `<polygon points="${poly(1)}" fill="${mode==="def"?"#fdf1f1":"#f1f8f3"}" stroke="#e3e8f0"/>`;
+  [.78,.33].forEach(r => svg += `<polygon points="${poly(r)}" fill="none" stroke="#e3e8f0"/>`);
+  svg += `<polygon points="${poly(.55)}" fill="${mode==="def"?"rgba(47,158,99,.10)":"rgba(232,116,31,.08)"}" stroke="#cbd5e1" stroke-dasharray="4 3"/>`;
+  ORDER.forEach((_,i)=>{ const [x,y]=P(i,RM); svg += `<line x1="${CX}" y1="${CY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#e3e8f0"/>`; });
+  const pts = ORDER.map((t,i)=>P(i,RM*f(vals[t])).map(n=>n.toFixed(1)).join(",")).join(" ");
+  svg += `<polygon points="${pts}" fill="${fill}" stroke="${stroke}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  ORDER.forEach((t,i)=>{
+    const m = vals[t], [x,y]=P(i,RM*f(m)), c = m>1.001 ? hi : m<0.999 ? lo : "#94a3b8";
+    svg += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="#fff" stroke="${c}" stroke-width="2.5"/>`;
+  });
+  svg += `<rect x="${CX-5}" y="${CY-5}" width="10" height="10" rx="2" transform="rotate(45 ${CX} ${CY})" fill="#475569"/>`;
+  svg += `<rect x="${CX-96}" y="${CY-9}" width="58" height="18" rx="9" fill="#fff" stroke="#cbd5e1"/><text x="${CX-67}" y="${CY+4}" text-anchor="middle" font-size="10" fill="#64748b" font-weight="600">×1 normal</text>`;
+  svg += `<text x="${CX}" y="${CY+34}" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1" fill="#15803d" opacity=".75">${mode==="def"?"TAKES LESS":"DEALS MORE"}</text>`;
+  svg += `<text x="${CX}" y="${CY+RM+13}" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1" fill="#c2410c" opacity=".8">${mode==="def"?"TAKES MORE DAMAGE":"DEALS LESS DAMAGE"}</text>`;
+  ORDER.forEach((t,i)=>{
+    const [x,y]=P(i,RI), m=vals[t], col = m>1.001 ? hiTxt : m<0.999 ? loTxt : "var(--mid)";
+    svg += `<g transform="translate(${(x-20).toFixed(1)} ${(y-20).toFixed(1)}) scale(1.111)">${badge(t)}</g>`;
+    svg += `<text x="${x.toFixed(1)}" y="${(y+37).toFixed(1)}" text-anchor="middle" font-size="16" font-weight="800" fill="${col}">×${fmtM(m)}</text>`;
+  });
+  svg += `</svg>`;
+
+  const hiL = ORDER.filter(t=>vals[t]>1.001).sort((a,b)=>vals[b]-vals[a]).map(t=>`<b class="${mode==="def"?"bad":"good"}">${t} (×${fmtM(vals[t])})</b>`);
+  const loL = ORDER.filter(t=>vals[t]<0.999).sort((a,b)=>vals[a]-vals[b]).map(t=>`<b class="${mode==="def"?"good":"bad"}">${t} (×${fmtM(vals[t])})</b>`);
+  let desc;
+  if(mode==="def"){
+    desc = `Further out = takes more damage. ${who} ` + (!hiL.length && !loL.length ? "takes normal damage from everything." :
+      [hiL.length?`takes more damage from ${joinList(hiL)}`:"", loL.length?`${hiL.length?"and ":"takes "}less from ${joinList(loL)}`:""].filter(Boolean).join(" ")+".");
+  } else {
+    desc = `Further out = deals more damage. ${who} ` + (!hiL.length && !loL.length ? "deals normal damage to everything." :
+      [hiL.length?`deals more to ${joinList(hiL)}`:"", loL.length?`${hiL.length?"and ":"deals "}less to ${joinList(loL)}`:""].filter(Boolean).join(" ")+".");
+  }
+  const legend = mode==="def"
+    ? [["resists","#15803d"],["normal","#94a3b8"],["weak to","#c2410c"]]
+    : [["strong against","#15803d"],["normal","#94a3b8"],["resisted by","#c2410c"]];
+  return `<section class="card radar"><div class="rhead"><h2>${mode==="def"?"Defence":"Attack"}</h2>
+    <div class="rbadges">${defs.map(d=>`<span>${elIco(d,30)}${d}</span>`).join("")}</div></div>
+    <p class="rdesc">${desc}</p>${svg}
+    <div class="legend">${legend.map(l=>`<span><i style="border-color:${l[1]}"></i>${l[0]}</span>`).join("")}</div></section>`;
+}
+
+/* ---------- results ---------- */
+const fmt = m => "×"+fmtM(m);
+function monRow(a, v, rightHtml){
+  return `<div class="mon">${portrait(a,v.file)}<span class="txt"><b>${a.name}</b>${v.n!=="Basic Form"?` <small>· ${v.n}</small>`:""}<br>
+    <span class="meta">${v.el.map(e=>elIco(e,16)).join("")}${v.el.join(" / ")}${a.role!=="?"?` · ${ROLES[a.role]}`:""}${a.total?` · ${a.total} stats`:""}</span></span>${rightHtml}</div>`;
+}
+
+function render(){
+  const out = document.getElementById("out");
+  const defs = [t1,t2].filter(Boolean);
+  if(!defs.length){ out.innerHTML=""; return; }
+  const v = picked ? variantsOf(picked)[formIdx] : null;
+  const who = picked ? picked.name : defs.join(" / ");
+  let html = picked
+    ? `<div class="target">${portrait(picked,v.file,true)}<span>${picked.name}<br><small>${v.n}</small></span></div>`
+    : `<div class="target">${defs.join(" / ")}</div>`;
+
+  const defVals = {}, atkVals = {};
+  TYPES.forEach(t => { defVals[t] = defs.reduce((p,d)=>p*mult(t,d),1); atkVals[t] = Math.max(...defs.map(e => mult(e,t))); });
+  html += radar("def", defVals, defs, who) + radar("atk", atkVals, defs, who);
+
+  const roleOk = a => roleFilter==="ALL" || a.role===roleFilter;
+  const notSelf = a => !(picked && a.name===picked.name);
+
+  const pool = ROSTER.filter(a => roleOk(a) && notSelf(a)).map(a => {
+    const best = variantsOf(a).map(x => ({v:x, s: against(x.el, defs)})).sort((x,y)=>y.s-x.s)[0];
+    return {a, v:best.v, s:best.s};
+  }).filter(x => x.s >= S).sort((x,y) => y.s-x.s || y.a.total-x.a.total).slice(0,8);
+  html += `<h2 class="sec">Aniimo to bring</h2>
+    <p class="hint">Aniimo (in their best form) with an element that hits for 1.6× or more, strongest base stats first.</p>
+    <div class="chips" id="roles">${["ALL","D","B","S","H","R"].map(r =>
+      `<button type="button" class="chip sm" data-role="${r}" aria-pressed="${r===roleFilter}">${r==="ALL"?"All roles":ROLES[r]}</button>`).join("")}</div>
+    <div class="bring">${pool.length ? pool.map(x => monRow(x.a, x.v, `<span class="mx ${x.s>2?'top':''}">${fmt(x.s)}</span>`)).join("")
+      : `<p class="empty">No Aniimo in this role have an advantage. Try another role.</p>`}</div>`;
+
+  const safe = ROSTER.filter(a => roleOk(a) && notSelf(a)).map(a => {
+    const best = variantsOf(a).map(x => ({v:x, takes: Math.max(...defs.map(e => x.el.reduce((p,d)=>p*mult(e,d),1)))})).sort((x,y)=>x.takes-y.takes)[0];
+    return {a, v:best.v, takes:best.takes};
+  }).filter(x => x.takes <= R).sort((x,y) => x.takes-y.takes || y.a.total-x.a.total).slice(0,4);
+  if(safe.length) html += `<h2 class="sec">Tough against it</h2>
+    <p class="hint">Aniimo that resist this target’s own elements, so they take reduced damage from its main attacks.</p>
+    <div class="bring">${safe.map(x => monRow(x.a, x.v, `<span class="mx good">takes ${fmt(x.takes)}</span>`)).join("")}</div>`;
+
+  out.innerHTML = html;
+  out.querySelectorAll("#roles .chip").forEach(b => b.onclick = () => { roleFilter=b.dataset.role; render(); });
+}
+
+(function(){
+  let h = "<tr><th>Atk ↓ / Def →</th>" + TYPES.map(t=>`<th>${t.slice(0,4)}</th>`).join("") + "</tr>";
+  TYPES.forEach(a => {
+    h += `<tr><th>${a}</th>` + CHART[a].map(v => `<td class="${v>1?'s':v<1?'w':''}">${v===1?"·":v}</td>`).join("") + "</tr>";
+  });
+  document.getElementById("chart").innerHTML = h;
+})();
+</script>
+</body>
+</html>
