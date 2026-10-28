@@ -9,10 +9,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
+  color-scheme:light;
   --bg:#eef2f7; --card:#ffffff; --ink:#1b2133; --muted:#707a8c; --line:#d9e0ea;
-  --navy:#1d2438; --sky:#6fd3f5; --link:#1fa2e0;
+  --soft:#f6f8fb; --hl:#eaf6fc; --sub:#475069; --avbg:#e6edf5; --sep:#b6bfcc;
+  --btn:#1d2438; --btnline:#323b58; --wm:#1d2438; --sky:#6fd3f5; --link:#1fa2e0;
   --pink:#f5a8d8; --lilac:#b7a1f7;
+  --head1:#ffffff; --head2:#fafcfe; --dots:#dfe6ef;
   --bad:#b42318; --good:#15803d; --mid:#64748b;
+  --ring:#e3e8f0; --ring2:#cbd5e1; --fill-def:#fdf1f1; --fill-atk:#f1f8f3;
+  --one-def:rgba(47,158,99,.10); --one-atk:rgba(232,116,31,.08);
+  --cellS:#fde3cf; --cellW:#d8f1e3; --code:#e3e9f1;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0d131b; --card:#161f2b; --ink:#e7edf5; --muted:#8fa0b5; --line:#263447;
+  --soft:#1c2736; --hl:#17324a; --sub:#b4c0d0; --avbg:#223044; --sep:#475569;
+  --btn:#2b3858; --btnline:#42527d; --wm:#e7edf5; --link:#4cc2ff;
+  --head1:#141d29; --head2:#111924; --dots:#1d2a3a;
+  --bad:#ff8a80; --good:#5fd97a; --mid:#9fb0c4;
+  --ring:#2a3a4f; --ring2:#3a4d66; --fill-def:#2a1c22; --fill-atk:#17271e;
+  --one-def:rgba(95,217,122,.10); --one-atk:rgba(232,116,31,.12);
+  --cellS:#4a2d17; --cellW:#15392a; --code:#243246;
 }
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top)}
@@ -21,25 +38,27 @@ body{margin:0;background:var(--bg);color:var(--ink);
 
 header{
   background:
-    radial-gradient(circle,#dfe6ef 1px,transparent 1.2px) 0 0/10px 10px,
-    linear-gradient(#fff,#fafcfe);
+    radial-gradient(circle,var(--dots) 1px,transparent 1.2px) 0 0/10px 10px,
+    linear-gradient(var(--head1),var(--head2));
   padding:calc(14px + env(safe-area-inset-top)) 20px 14px;
   display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative}
 header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
   background:linear-gradient(90deg,var(--sky),var(--pink),var(--lilac))}
-.wordmark{font-weight:800;font-style:italic;font-size:1.7rem;letter-spacing:.02em;color:var(--navy);line-height:1}
-.pill{display:inline-block;background:var(--navy);color:var(--sky);font-weight:700;
+.wordmark{font-weight:800;font-style:italic;font-size:1.7rem;letter-spacing:.02em;color:var(--wm);line-height:1}
+.hright{display:flex;align-items:center;gap:10px}
+.pill{display:inline-block;background:var(--btn);color:var(--sky);font-weight:700;
   font-size:.9rem;padding:9px 18px;border-radius:999px;text-decoration:none;
-  border:2px solid #323b58;white-space:nowrap}
-.pill:hover{background:#2a3350}
-a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+  border:2px solid var(--btnline);white-space:nowrap}
+.iconbtn{width:40px;height:40px;border-radius:50%;border:2px solid var(--btnline);background:var(--btn);
+  color:var(--sky);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,.tipg:focus-visible{outline:3px solid var(--link);outline-offset:2px}
 
 main{max-width:680px;margin:0 auto;padding:22px 20px 56px}
 .crumbs{font-size:.92rem;color:var(--muted);margin-bottom:18px}
 .crumbs a{color:inherit;text-decoration:none}
 .crumbs a:hover{color:var(--link)}
 .crumbs .here{color:var(--link)}
-.crumbs .sep{margin:0 6px;color:#b6bfcc}
+.crumbs .sep{margin:0 6px;color:var(--sep)}
 h1{font-size:2rem;line-height:1.2;font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
 .date{color:var(--muted);margin:0 0 18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
 
@@ -54,28 +73,34 @@ h1{font-size:2rem;line-height:1.2;font-weight:800;margin:0 0 6px;letter-spacing:
   text-shadow:0 2px 8px rgba(30,60,140,.45);text-transform:uppercase}
 .banner span{font-style:italic;font-weight:600;margin-top:6px;text-shadow:0 1px 6px rgba(30,60,140,.45)}
 
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;font:inherit;font-weight:700;border:0;background:none;color:var(--sub);padding:8px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--btn);color:var(--sky)}
+
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
 .card h2{font-size:.98rem;margin:0 0 10px;font-weight:700}
-.card h2 small{font-weight:500;color:var(--muted)}
+.stitle{display:flex;align-items:center;gap:8px}
+.sdot{width:12px;height:12px;border-radius:50%;display:none}
+.compare .sdot{display:inline-block}
 
 .ico{flex:none;display:inline-block;vertical-align:middle}
-.av{width:36px;height:36px;border-radius:50%;object-fit:contain;flex:none;background:#e6edf5;
+.av{width:36px;height:36px;border-radius:50%;object-fit:contain;flex:none;background:var(--avbg);
   display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.95rem}
 .av.lg{width:52px;height:52px}
 
 .search{position:relative}
 input[type=search]{width:100%;font:inherit;padding:11px 16px;border-radius:999px;border:2px solid var(--line);
-  background:#f6f8fb;color:var(--ink)}
+  background:var(--soft);color:var(--ink)}
 input[type=search]:focus{border-color:var(--link);outline:none}
 .results{list-style:none;margin:8px 0 0;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .results:empty{display:none}
 .results button{width:100%;text-align:left;font:inherit;background:var(--card);color:var(--ink);border:0;
   border-bottom:1px solid var(--line);padding:8px 14px;cursor:pointer;display:flex;gap:12px;align-items:center}
 .results li:last-child button{border-bottom:0}
-.results button:hover,.results button:focus-visible{background:#eaf6fc}
+.results button:hover,.results button:focus-visible{background:var(--hl)}
 .results .txt{flex:1;display:flex;flex-direction:column;line-height:1.3}
 .results .el{color:var(--muted);font-size:.82rem}
-.picked{display:flex;align-items:center;gap:12px;margin-top:12px;background:#eaf6fc;border-radius:12px;padding:10px 14px}
+.picked{display:flex;align-items:center;gap:12px;margin-top:12px;background:var(--hl);border-radius:12px;padding:10px 14px}
 .picked .txt{flex:1;line-height:1.3}
 .picked .txt small{color:var(--muted)}
 .picked button{font:inherit;font-weight:600;color:var(--link);background:none;border:0;cursor:pointer}
@@ -84,27 +109,66 @@ input[type=search]:focus{border-color:var(--link);outline:none}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 button.chip{font:inherit;font-weight:600;font-size:.93rem;border:2px solid var(--line);
-  background:#f6f8fb;color:var(--ink);padding:6px 14px 6px 8px;border-radius:999px;cursor:pointer;
+  background:var(--soft);color:var(--ink);padding:6px 14px;border-radius:999px;cursor:pointer;
   display:inline-flex;align-items:center;gap:7px}
-button.chip[aria-pressed="true"]{background:var(--navy);border-color:#323b58;color:var(--sky)}
+button.chip[aria-pressed="true"]{background:var(--btn);border-color:var(--btnline);color:var(--sky)}
 button.chip.sm{font-size:.82rem;padding:3px 12px}
 button.chip.sm small{opacity:.75}
 
-.target{font-size:1.3rem;font-weight:800;margin:26px 0 10px;display:flex;align-items:center;gap:12px}
+/* element picker: Element 1 left, Element 2 right */
+details.manual{margin-top:14px}
+details.manual summary{cursor:pointer;font-weight:700;font-size:.95rem}
+.pickgrid{position:relative;display:grid;grid-template-columns:1fr 1fr;margin-top:12px;
+  border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.pcol{padding:12px 10px 6px;background:var(--soft)}
+.pcol + .pcol{border-left:2px dashed var(--ring2);background:var(--card)}
+.pcol h3{margin:0 0 10px;font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.pcol h3 small{text-transform:none;letter-spacing:0;font-weight:500}
+.erow{display:flex;align-items:center;gap:8px;width:100%;font:inherit;font-weight:600;font-size:.9rem;
+  padding:5px 8px 5px 6px;margin-bottom:6px;border:2px solid var(--line);border-radius:12px;
+  background:var(--card);color:var(--ink);cursor:pointer;text-align:left}
+.pcol + .pcol .erow{background:var(--soft)}
+.erow[aria-pressed="true"]{background:var(--btn);border-color:var(--btnline);color:var(--sky)}
+.erow:disabled{opacity:.3;cursor:not-allowed}
+.erow.none svg{width:22px;height:22px}
+.plus{position:absolute;left:50%;top:26px;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;
+  background:var(--btn);color:var(--sky);display:flex;align-items:center;justify-content:center;font-weight:800;z-index:1;
+  border:2px solid var(--card)}
+
+.toolbar{display:flex;justify-content:flex-end;margin-top:18px}
+.copy{font:inherit;font-weight:700;font-size:.85rem;border:2px solid var(--line);background:var(--card);color:var(--link);
+  padding:4px 14px;border-radius:999px;cursor:pointer}
+.target{font-size:1.3rem;font-weight:800;margin:10px 0 10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .target small{font-weight:500;color:var(--muted);font-size:.9rem}
+.vsmark{color:var(--muted);font-weight:700;font-size:1rem}
 
 /* radar cards */
 .radar{padding:18px 16px 14px;border-radius:22px;box-shadow:0 4px 18px rgba(40,60,100,.06)}
 .rhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .rhead h2{font-size:1.5rem;margin:0;font-weight:800}
-.rbadges{display:flex;gap:14px;align-items:center;font-weight:600;font-size:.95rem}
+.rbadges{display:flex;gap:10px 14px;align-items:center;font-weight:600;font-size:.95rem;flex-wrap:wrap}
 .rbadges span{display:inline-flex;align-items:center;gap:6px}
-.rdesc{color:#475069;margin:8px 0 0;font-size:.95rem}
+.rdesc{color:var(--sub);margin:8px 0 0;font-size:.95rem}
 .rdesc b.bad{color:var(--bad)} .rdesc b.good{color:var(--good)}
 .radar svg.chart{width:100%;height:auto;display:block;margin:6px auto 0;max-width:460px}
-.legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-weight:600;color:#475069;font-size:.92rem}
+.r-out.r-def{fill:var(--fill-def)} .r-out.r-atk{fill:var(--fill-atk)}
+.r-out,.r-ring{stroke:var(--ring)} .r-ring{fill:none}
+.r-one{stroke:var(--ring2);stroke-dasharray:4 3}
+.r-one-def{fill:var(--one-def)} .r-one-atk{fill:var(--one-atk)}
+.r-spoke{stroke:var(--ring)}
+.r-center{fill:var(--sub)}
+.r-pill{fill:var(--card);stroke:var(--ring2)}
+.r-pilltxt{fill:var(--mid)}
+.r-dot{fill:var(--card)}
+.tipg{cursor:pointer}
+.tipline{margin:4px auto 10px;max-width:460px;min-height:44px;font-size:.88rem;color:var(--muted);text-align:center}
+.tipline.on{color:var(--ink);background:var(--soft);border-radius:12px;padding:8px 12px;text-align:left}
+.legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-weight:600;color:var(--sub);font-size:.92rem}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:50%;border:3px solid;vertical-align:-1px;margin-right:6px}
+.legend i.fill{background:currentColor}
 
+.tag{display:inline-flex;align-items:center;gap:7px;padding:3px 12px 3px 6px;border-radius:999px;
+  background:var(--soft);font-size:.92rem;font-weight:500;margin:0 6px 6px 0}
 .sec{margin:28px 0 8px;font-size:1.15rem;font-weight:800}
 .hint{color:var(--muted);font-size:.88rem;margin:0 0 10px}
 .bring{display:grid;gap:8px;margin-top:10px}
@@ -117,16 +181,26 @@ button.chip.sm small{opacity:.75}
 .mon .mx.good{color:var(--good)}
 .empty{color:var(--muted);margin:0}
 
-details{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
-summary{cursor:pointer;font-weight:700}
+/* compare table + summary */
+.cmp{width:100%;border-collapse:collapse;font-size:.9rem}
+.cmp th,.cmp td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:center}
+.cmp th:first-child{text-align:left}
+.cmp thead th{font-size:.78rem;color:var(--muted);font-weight:700}
+.cmp .tt{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.cmp .bad{color:var(--bad);font-weight:800} .cmp .good{color:var(--good);font-weight:800} .cmp .mid{color:var(--mid)}
+.quick{margin:0;padding-left:18px}
+.quick li{margin-bottom:8px}
+
+details.fullchart{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+details.fullchart summary{cursor:pointer;font-weight:700}
 .scroll{overflow-x:auto;margin-top:12px}
-table{border-collapse:collapse;font-size:.8rem;min-width:100%}
-th,td{border:1px solid var(--line);padding:5px 6px;text-align:center}
-th:first-child{text-align:left}
-td.s{background:#fde3cf;font-weight:700}
-td.w{background:#d8f1e3}
+table.big{border-collapse:collapse;font-size:.8rem;min-width:100%}
+table.big th,table.big td{border:1px solid var(--line);padding:5px 6px;text-align:center}
+table.big th:first-child{text-align:left}
+td.s{background:var(--cellS);font-weight:700}
+td.w{background:var(--cellW)}
 .note{color:var(--muted);font-size:.85rem;margin-top:24px}
-code{background:#e3e9f1;padding:1px 5px;border-radius:4px}
+code{background:var(--code);padding:1px 5px;border-radius:4px}
 footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 20px 32px}
 footer a{color:var(--link)}
 </style>
@@ -134,7 +208,10 @@ footer a{color:var(--link)}
 <body>
 <header>
   <span class="wordmark">ANIIMO</span>
-  <a class="pill" href="https://aniimo.com" target="_blank" rel="noopener noreferrer">Official site</a>
+  <div class="hright">
+    <button id="themeBtn" class="iconbtn" type="button" aria-label="Switch theme"></button>
+    <a class="pill" href="https://aniimo.com" target="_blank" rel="noopener noreferrer">Official site</a>
+  </div>
 </header>
 
 <main>
@@ -150,25 +227,17 @@ footer a{color:var(--link)}
     <span>Search an Aniimo, pick its form, find what beats it</span>
   </div>
 
-  <section class="card">
-    <h2>Find an Aniimo</h2>
-    <div class="search">
-      <input id="q" type="search" placeholder="Type a name, like Scorchhowl" autocomplete="off" aria-label="Search Aniimo by name">
-      <ul class="results" id="results"></ul>
-    </div>
-    <div id="picked"></div>
-  </section>
+  <div class="seg" id="seg" role="group" aria-label="Mode">
+    <button type="button" data-m="single" aria-pressed="true">Single</button>
+    <button type="button" data-m="compare" aria-pressed="false">Compare two</button>
+  </div>
 
-  <section class="card"><h2>Or pick elements <small>(2nd is optional)</small></h2>
-    <div class="chips" id="p1"></div>
-    <div class="chips" id="p2" style="margin-top:10px"></div>
-  </section>
-
+  <div id="slots"></div>
   <div id="out"></div>
 
-  <details>
+  <details class="fullchart">
     <summary>Full chart (attacker → defender)</summary>
-    <div class="scroll"><table id="chart"></table></div>
+    <div class="scroll"><table class="big" id="chart"></table></div>
   </details>
 
   <p class="note">
@@ -215,6 +284,8 @@ const GLYPH = {
 };
 const badge = t => `<circle cx="18" cy="18" r="18" fill="${COLORS[t]}"/><g transform="translate(6 6)">${GLYPH[t]}</g>`;
 const elIco = (t,s=20) => `<svg class="ico" width="${s}" height="${s}" viewBox="0 0 36 36" aria-hidden="true">${badge(t)}</svg>`;
+const tag = t => `<span class="tag">${elIco(t,20)}${t}</span>`;
+const tags = a => a.map(tag).join("");
 
 /* ---------- Aniimo portraits: icons/aniimo/<id>.webp, initial badge if missing ---------- */
 function iconFail(img){
@@ -336,135 +407,219 @@ Little Fire Spirit|Fire|S|517||`.trim().split("\n").map(l => {
 });
 const variantsOf = a => [{n:"Basic Form", el:a.el, file:a.file}, ...a.forms];
 
-let t1=null, t2=null, picked=null, formIdx=0, roleFilter="ALL";
+/* ---------- state ---------- */
+const SLOT_COLORS = ["#3b82f6","#ec4899"], SLOT_FILLS = ["rgba(59,130,246,.2)","rgba(236,72,153,.2)"];
+const slots = [0,1].map(() => ({t1:null, t2:null, picked:null, formIdx:0}));
+let compare = false, roleFilter = "ALL", lastSeries = [];
+const elsOf = s => [s.t1,s.t2].filter(Boolean);
+const varOf = s => s.picked ? variantsOf(s.picked)[s.formIdx] : null;
 
-/* ---------- element picker ---------- */
-function chip(type, group, onPick){
-  const b = document.createElement("button");
-  b.className="chip"; b.type="button"; b.setAttribute("aria-pressed","false");
-  b.innerHTML = `${elIco(type,22)}${type}`;
-  b.onclick = () => onPick(type); b.dataset.type = type;
-  group.appendChild(b);
-}
-function sync(){
-  document.querySelectorAll("#p1 .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.type===t1));
-  document.querySelectorAll("#p2 .chip").forEach(b => b.setAttribute("aria-pressed", b.dataset.type===t2));
-  const pk = document.getElementById("picked");
-  if(picked){
-    const vs = variantsOf(picked);
-    pk.innerHTML = `<div class="picked">${portrait(picked,vs[formIdx].file,true)}<span class="txt"><b>${picked.name}</b><br><small>${ROLES[picked.role]}${picked.total?` · ${picked.total} stats`:""}</small></span><button type="button" id="clr">Clear</button></div>` +
-      (vs.length>1 ? `<div class="formrow"><p>Form</p><div class="chips" id="forms">${vs.map((v,i)=>
-        `<button type="button" class="chip sm" data-i="${i}" aria-pressed="${i===formIdx}">${v.n.replace(" Form","")} <small>${v.el.join("/")}</small></button>`).join("")}</div></div>` : "");
-    document.getElementById("clr").onclick = () => { picked=null; t1=t2=null; sync(); };
-    document.querySelectorAll("#forms .chip").forEach(b => b.onclick = () => { formIdx=+b.dataset.i; applyForm(); });
-  } else pk.innerHTML = "";
-  render();
-}
-function applyForm(){ const v = variantsOf(picked)[formIdx]; t1=v.el[0]; t2=v.el[1]||null; sync(); }
-TYPES.forEach(t => chip(t, document.getElementById("p1"), v => { picked=null; t1=(t1===v)?null:v; if(t1===t2) t2=null; sync(); }));
-TYPES.forEach(t => chip(t, document.getElementById("p2"), v => { picked=null; t2=(t2===v)?null:v; if(t1===t2) t1=null; sync(); }));
+/* ---------- build the two Aniimo slots ---------- */
+const NONE_ICON = `<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 4"/></svg>`;
+slots.forEach((s,i) => {
+  const sec = document.createElement("section");
+  sec.className = "card slot";
+  sec.innerHTML = `<h2 class="stitle"><i class="sdot" style="background:${SLOT_COLORS[i]}"></i><span class="stxt">Find an Aniimo</span></h2>
+    <div class="search"><input type="search" placeholder="Type a name, like Scorchhowl" autocomplete="off" aria-label="Search Aniimo ${i?"B":"A"} by name"><ul class="results"></ul></div>
+    <div class="pk"></div>
+    <details class="manual" ${i===0?"open":""}><summary>Pick elements manually</summary>
+      <div class="pickgrid"><span class="plus" aria-hidden="true">+</span>
+        <div class="pcol"><h3>Element 1</h3><div class="c1"></div></div>
+        <div class="pcol"><h3>Element 2 <small>(optional)</small></h3><div class="c2"></div></div>
+      </div></details>`;
+  document.getElementById("slots").appendChild(sec);
+  const dom = s.dom = {sec, input: sec.querySelector("input"), results: sec.querySelector(".results"), pk: sec.querySelector(".pk"),
+    c1: sec.querySelector(".c1"), c2: sec.querySelector(".c2"), title: sec.querySelector(".stxt")};
+  const mkRow = (t, label, icon) => `<button type="button" class="erow${t?"":" none"}" data-t="${t}" aria-pressed="false">${icon}<span>${label}</span></button>`;
+  dom.c1.innerHTML = TYPES.map(t => mkRow(t,t,elIco(t,22))).join("");
+  dom.c2.innerHTML = mkRow("","None",NONE_ICON) + TYPES.map(t => mkRow(t,t,elIco(t,22))).join("");
+  dom.c1.onclick = e => { const b=e.target.closest(".erow"); if(b) pickElem(i,1,b.dataset.t); };
+  dom.c2.onclick = e => { const b=e.target.closest(".erow"); if(b) pickElem(i,2,b.dataset.t); };
+  dom.input.addEventListener("input", () => showResults(i));
+  dom.input.addEventListener("keydown", e => { if(e.key==="Enter"){ const b = dom.results.querySelector("button:not([disabled])"); if(b) b.click(); }});
+});
 
-/* ---------- creature search ---------- */
-const q = document.getElementById("q"), results = document.getElementById("results");
-function showResults(){
-  const s = q.value.trim().toLowerCase();
-  results.innerHTML = "";
+function pickElem(i, col, t){
+  const s = slots[i]; s.picked = null; s.formIdx = 0;
+  if(col===1){ s.t1 = (s.t1===t) ? null : t; if(!s.t1 && s.t2){ s.t1 = s.t2; s.t2 = null; } }
+  else { s.t2 = (!t || s.t2===t) ? null : t; }
+  sync();
+}
+function showResults(i){
+  const dom = slots[i].dom, s = dom.input.value.trim().toLowerCase();
+  dom.results.innerHTML = "";
   if(!s) return;
   const m = a => a.name.toLowerCase().includes(s) || (a.alias && a.alias.toLowerCase().includes(s));
   const hits = ROSTER.filter(m)
     .sort((a,b)=> b.name.toLowerCase().startsWith(s) - a.name.toLowerCase().startsWith(s) || a.name.localeCompare(b.name)).slice(0,6);
-  if(!hits.length){ results.innerHTML = `<li><button type="button" disabled>No match. Use the element buttons instead.</button></li>`; return; }
+  if(!hits.length){ dom.results.innerHTML = `<li><button type="button" disabled>No match. Use the element buttons instead.</button></li>`; return; }
   hits.forEach(a => {
     const li = document.createElement("li");
     li.innerHTML = `<button type="button">${portrait(a,a.file)}<span class="txt"><span>${a.name}${a.alias?` <small class="el">(${a.alias})</small>`:""}</span><span class="el">${a.el.join(" / ")}${a.forms.length?` · ${a.forms.length} form${a.forms.length>1?"s":""}`:""}</span></span></button>`;
-    li.firstChild.onclick = () => pick(a);
-    results.appendChild(li);
+    li.firstChild.onclick = () => pickSpecies(i,a);
+    dom.results.appendChild(li);
   });
 }
-function pick(a){ picked=a; formIdx=0; q.value=""; results.innerHTML=""; applyForm(); }
-q.addEventListener("input", showResults);
-q.addEventListener("keydown", e => { if(e.key==="Enter"){ const b = results.querySelector("button:not([disabled])"); if(b) b.click(); }});
+function pickSpecies(i, a){ const s = slots[i]; s.picked = a; s.formIdx = 0; s.dom.input.value = ""; s.dom.results.innerHTML = ""; applyForm(i); }
+function applyForm(i){ const s = slots[i], v = varOf(s); s.t1 = v.el[0]; s.t2 = v.el[1]||null; sync(); }
+
+function syncSlot(i){
+  const s = slots[i], dom = s.dom;
+  dom.sec.hidden = (i===1 && !compare);
+  dom.title.textContent = compare ? (i ? "Aniimo B" : "Aniimo A") : "Find an Aniimo";
+  dom.c1.querySelectorAll(".erow").forEach(b => { b.setAttribute("aria-pressed", b.dataset.t===s.t1); b.disabled = !!b.dataset.t && b.dataset.t===s.t2; });
+  dom.c2.querySelectorAll(".erow").forEach(b => { b.setAttribute("aria-pressed", b.dataset.t ? b.dataset.t===s.t2 : !s.t2); b.disabled = !!b.dataset.t && b.dataset.t===s.t1; });
+  if(s.picked){
+    const vs = variantsOf(s.picked);
+    dom.pk.innerHTML = `<div class="picked">${portrait(s.picked,vs[s.formIdx].file,true)}<span class="txt"><b>${s.picked.name}</b><br><small>${ROLES[s.picked.role]}${s.picked.total?` · ${s.picked.total} stats`:""}</small></span><button type="button" class="clr">Clear</button></div>` +
+      (vs.length>1 ? `<div class="formrow"><p>Form</p><div class="chips forms">${vs.map((v,k)=>
+        `<button type="button" class="chip sm" data-i="${k}" aria-pressed="${k===s.formIdx}">${v.n.replace(" Form","")} <small>${v.el.join("/")}</small></button>`).join("")}</div></div>` : "");
+    dom.pk.querySelector(".clr").onclick = () => { s.picked=null; s.t1=s.t2=null; s.formIdx=0; sync(); };
+    dom.pk.querySelectorAll(".forms .chip").forEach(b => b.onclick = () => { s.formIdx = +b.dataset.i; applyForm(i); });
+  } else dom.pk.innerHTML = "";
+}
+function sync(){
+  document.getElementById("slots").classList.toggle("compare", compare);
+  document.querySelectorAll("#seg button").forEach(b => b.setAttribute("aria-pressed", (b.dataset.m==="compare")===compare));
+  slots.forEach((_,i) => syncSlot(i));
+  render(); updateHash();
+}
+document.querySelectorAll("#seg button").forEach(b => b.onclick = () => { compare = b.dataset.m==="compare"; sync(); });
+
+/* ---------- share links (#a=Scorchhowl.1&b=e:Fire+Water&m=c) ---------- */
+const ser = s => s.picked ? encodeURIComponent(s.picked.name)+"."+s.formIdx : (elsOf(s).length ? "e:"+elsOf(s).join("+") : "");
+function updateHash(){
+  const parts = [], a = ser(slots[0]);
+  if(a) parts.push("a="+a);
+  if(compare){ const b = ser(slots[1]); if(b) parts.push("b="+b); parts.push("m=c"); }
+  const h = parts.length ? "#"+parts.join("&") : "";
+  try{ history.replaceState(null,"",h || (location.pathname+location.search)); }catch(e){ try{ location.hash = h; }catch(_){} }
+}
+function loadHash(){
+  const h = location.hash.slice(1);
+  slots.forEach(s => { s.t1=s.t2=null; s.picked=null; s.formIdx=0; }); compare = false;
+  if(!h) return;
+  const p = {}; h.split("&").forEach(x => { const k = x.indexOf("="); if(k>0) p[x.slice(0,k)] = x.slice(k+1); });
+  compare = p.m==="c";
+  [["a",0],["b",1]].forEach(([k,i]) => {
+    const v = p[k]; if(!v) return; const s = slots[i];
+    if(v.startsWith("e:")){ const e = v.slice(2).split("+").filter(t=>TYPES.includes(t)).slice(0,2); s.t1=e[0]||null; s.t2=e[1]||null; return; }
+    try{
+      const d = v.lastIndexOf("."), nm = decodeURIComponent(v.slice(0,d)).toLowerCase();
+      const a = ROSTER.find(x => x.name.toLowerCase()===nm); if(!a) return;
+      const vs = variantsOf(a), fi = +v.slice(d+1);
+      s.picked = a; s.formIdx = fi>=0 && fi<vs.length ? fi : 0;
+      s.t1 = vs[s.formIdx].el[0]; s.t2 = vs[s.formIdx].el[1]||null;
+    }catch(e){}
+  });
+}
+window.addEventListener("hashchange", () => { loadHash(); sync(); });
 
 /* ---------- radar charts ---------- */
 const ORDER = ["Water","Light","Dark","Wind","Earth","Grass","Lightning","Ice","Fire"]; // clockwise from top
 const fmtM = m => Math.abs(m-0.625)<1e-6 ? "0.625" : String(Math.round(m*100)/100);
+const fmt = m => "×"+fmtM(m);
 const against = (atkEls, defEls) => Math.max(...atkEls.map(e => defEls.reduce((p,d)=>p*mult(e,d),1)));
 const joinList = a => a.length<2 ? a.join("") : a.slice(0,-1).join(", ")+" and "+a[a.length-1];
 
-/* mode "def": higher = worse for the target (red); mode "atk": higher = better (green) */
-function radar(mode, vals, defs, who){
-  const CX=200, CY=215, RM=95, RI=158, maxM = mode==="def" ? 2.56 : 1.6;
+function seriesOf(i, color, fill){
+  const s = slots[i], els = elsOf(s), def = {}, atk = {};
+  TYPES.forEach(t => { def[t] = els.reduce((p,d)=>p*mult(t,d),1); atk[t] = Math.max(...els.map(e=>mult(e,t))); });
+  return {i, s, els, name: s.picked ? s.picked.name : els.join(" / "), def, atk, color, fill, v: varOf(s)};
+}
+
+function radar(mode, series){
+  const multi = series.length>1, CX=200, CY=215, RM=95, RI=158, maxM = mode==="def" ? 2.56 : 1.6, H = multi ? 430 : 410;
   const f = m => 0.55 + 0.45*Math.max(-1, Math.min(1, Math.log(m)/Math.log(maxM)));
   const P = (i,r) => { const a=i*Math.PI*2/9; return [CX+r*Math.sin(a), CY-r*Math.cos(a)]; };
   const poly = fr => ORDER.map((_,i)=>P(i,RM*fr).map(n=>n.toFixed(1)).join(",")).join(" ");
   const hi = mode==="def" ? "#c2410c" : "#15803d", lo = mode==="def" ? "#15803d" : "#c2410c";
   const hiTxt = mode==="def" ? "var(--bad)" : "var(--good)", loTxt = mode==="def" ? "var(--good)" : "var(--bad)";
-  const fill = mode==="def" ? "rgba(239,68,68,.22)" : "rgba(22,163,74,.22)", stroke = mode==="def" ? "#ef4444" : "#16a34a";
-  let svg = `<svg class="chart" viewBox="0 0 400 410" role="img" aria-label="${mode==="def"?"Defence":"Attack"} radar chart">`;
-  svg += `<polygon points="${poly(1)}" fill="${mode==="def"?"#fdf1f1":"#f1f8f3"}" stroke="#e3e8f0"/>`;
-  [.78,.33].forEach(r => svg += `<polygon points="${poly(r)}" fill="none" stroke="#e3e8f0"/>`);
-  svg += `<polygon points="${poly(.55)}" fill="${mode==="def"?"rgba(47,158,99,.10)":"rgba(232,116,31,.08)"}" stroke="#cbd5e1" stroke-dasharray="4 3"/>`;
-  ORDER.forEach((_,i)=>{ const [x,y]=P(i,RM); svg += `<line x1="${CX}" y1="${CY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#e3e8f0"/>`; });
-  const pts = ORDER.map((t,i)=>P(i,RM*f(vals[t])).map(n=>n.toFixed(1)).join(",")).join(" ");
-  svg += `<polygon points="${pts}" fill="${fill}" stroke="${stroke}" stroke-width="2.5" stroke-linejoin="round"/>`;
-  ORDER.forEach((t,i)=>{
-    const m = vals[t], [x,y]=P(i,RM*f(m)), c = m>1.001 ? hi : m<0.999 ? lo : "#94a3b8";
-    svg += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="#fff" stroke="${c}" stroke-width="2.5"/>`;
+  let svg = `<svg class="chart" viewBox="0 0 400 ${H}" role="group" aria-label="${mode==="def"?"Defence":"Attack"} radar chart">`;
+  svg += `<polygon class="r-out r-${mode}" points="${poly(1)}"/>`;
+  [.78,.33].forEach(r => svg += `<polygon class="r-ring" points="${poly(r)}"/>`);
+  svg += `<polygon class="r-one r-one-${mode}" points="${poly(.55)}"/>`;
+  ORDER.forEach((_,i)=>{ const [x,y]=P(i,RM); svg += `<line class="r-spoke" x1="${CX}" y1="${CY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`; });
+  series.forEach(s => {
+    const col = multi ? s.color : (mode==="def" ? "#ef4444" : "#16a34a"), fill = multi ? s.fill : (mode==="def" ? "rgba(239,68,68,.22)" : "rgba(22,163,74,.22)");
+    const pts = ORDER.map((t,i)=>P(i,RM*f(s[mode][t])).map(n=>n.toFixed(1)).join(",")).join(" ");
+    svg += `<polygon points="${pts}" fill="${fill}" stroke="${col}" stroke-width="2.5" stroke-linejoin="round"/>`;
   });
-  svg += `<rect x="${CX-5}" y="${CY-5}" width="10" height="10" rx="2" transform="rotate(45 ${CX} ${CY})" fill="#475569"/>`;
-  svg += `<rect x="${CX-96}" y="${CY-9}" width="58" height="18" rx="9" fill="#fff" stroke="#cbd5e1"/><text x="${CX-67}" y="${CY+4}" text-anchor="middle" font-size="10" fill="#64748b" font-weight="600">×1 normal</text>`;
-  svg += `<text x="${CX}" y="${CY+34}" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1" fill="#15803d" opacity=".75">${mode==="def"?"TAKES LESS":"DEALS MORE"}</text>`;
-  svg += `<text x="${CX}" y="${CY+RM+13}" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1" fill="#c2410c" opacity=".8">${mode==="def"?"TAKES MORE DAMAGE":"DEALS LESS DAMAGE"}</text>`;
+  series.forEach(s => ORDER.forEach((t,i)=>{
+    const m = s[mode][t], [x,y]=P(i,RM*f(m)), c = multi ? s.color : (m>1.001 ? hi : m<0.999 ? lo : "#94a3b8");
+    svg += `<circle class="r-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" stroke="${c}" stroke-width="2.5"/>`;
+  }));
+  svg += `<rect class="r-center" x="${CX-5}" y="${CY-5}" width="10" height="10" rx="2" transform="rotate(45 ${CX} ${CY})"/>`;
+  svg += `<rect class="r-pill" x="${CX-96}" y="${CY-9}" width="58" height="18" rx="9"/><text class="r-pilltxt" x="${CX-67}" y="${CY+4}" text-anchor="middle" font-size="10" font-weight="600">×1 normal</text>`;
+  svg += `<text x="${CX}" y="${CY+34}" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1" fill="#15803d" opacity=".8">${mode==="def"?"TAKES LESS":"DEALS MORE"}</text>`;
+  svg += `<text x="${CX}" y="${CY+RM+13}" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="1" fill="#c2410c" opacity=".85">${mode==="def"?"TAKES MORE DAMAGE":"DEALS LESS DAMAGE"}</text>`;
   ORDER.forEach((t,i)=>{
-    const [x,y]=P(i,RI), m=vals[t], col = m>1.001 ? hiTxt : m<0.999 ? loTxt : "var(--mid)";
-    svg += `<g transform="translate(${(x-20).toFixed(1)} ${(y-20).toFixed(1)}) scale(1.111)">${badge(t)}</g>`;
-    svg += `<text x="${x.toFixed(1)}" y="${(y+37).toFixed(1)}" text-anchor="middle" font-size="16" font-weight="800" fill="${col}">×${fmtM(m)}</text>`;
+    const [x,y]=P(i,RI);
+    svg += `<g class="tipg" tabindex="0" role="button" aria-label="Explain ${t}" data-mode="${mode}" data-t="${t}">
+      <g transform="translate(${(x-20).toFixed(1)} ${(y-20).toFixed(1)}) scale(1.111)">${badge(t)}</g>`;
+    if(multi) series.forEach((s,k) => svg += `<text x="${x.toFixed(1)}" y="${(y+34+k*16).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="800" fill="${s.color}">×${fmtM(s[mode][t])}</text>`);
+    else { const m = series[0][mode][t], col = m>1.001 ? hiTxt : m<0.999 ? loTxt : "var(--mid)";
+      svg += `<text x="${x.toFixed(1)}" y="${(y+37).toFixed(1)}" text-anchor="middle" font-size="16" font-weight="800" fill="${col}">×${fmtM(m)}</text>`; }
+    svg += `</g>`;
   });
   svg += `</svg>`;
 
-  const hiL = ORDER.filter(t=>vals[t]>1.001).sort((a,b)=>vals[b]-vals[a]).map(t=>`<b class="${mode==="def"?"bad":"good"}">${t} (×${fmtM(vals[t])})</b>`);
-  const loL = ORDER.filter(t=>vals[t]<0.999).sort((a,b)=>vals[a]-vals[b]).map(t=>`<b class="${mode==="def"?"good":"bad"}">${t} (×${fmtM(vals[t])})</b>`);
-  let desc;
-  if(mode==="def"){
-    desc = `Further out = takes more damage. ${who} ` + (!hiL.length && !loL.length ? "takes normal damage from everything." :
-      [hiL.length?`takes more damage from ${joinList(hiL)}`:"", loL.length?`${hiL.length?"and ":"takes "}less from ${joinList(loL)}`:""].filter(Boolean).join(" ")+".");
+  let desc, head, legend;
+  if(!multi){
+    const s = series[0], v = s[mode];
+    const hiL = ORDER.filter(t=>v[t]>1.001).sort((a,b)=>v[b]-v[a]).map(t=>`<b class="${mode==="def"?"bad":"good"}">${t} (×${fmtM(v[t])})</b>`);
+    const loL = ORDER.filter(t=>v[t]<0.999).sort((a,b)=>v[a]-v[b]).map(t=>`<b class="${mode==="def"?"good":"bad"}">${t} (×${fmtM(v[t])})</b>`);
+    const verb = mode==="def" ? "takes" : "deals", pre = mode==="def" ? "from" : "to";
+    desc = `Further out = ${verb} more damage. ${s.name} ` + (!hiL.length && !loL.length ? `${verb} normal damage ${mode==="def"?"from everything":"to everything"}.` :
+      [hiL.length?`${verb} more damage ${pre} ${joinList(hiL)}`:"", loL.length?`${hiL.length?"and ":verb+" "}less ${pre} ${joinList(loL)}`:""].filter(Boolean).join(" ")+".");
+    head = s.els.map(d=>`<span>${elIco(d,30)}${d}</span>`).join("");
+    legend = mode==="def" ? [["resists","#15803d"],["normal","#94a3b8"],["weak to","#c2410c"]] : [["strong against","#15803d"],["normal","#94a3b8"],["resisted by","#c2410c"]];
+    legend = legend.map(l=>`<span><i style="border-color:${l[1]}"></i>${l[0]}</span>`).join("");
   } else {
-    desc = `Further out = deals more damage. ${who} ` + (!hiL.length && !loL.length ? "deals normal damage to everything." :
-      [hiL.length?`deals more to ${joinList(hiL)}`:"", loL.length?`${hiL.length?"and ":"deals "}less to ${joinList(loL)}`:""].filter(Boolean).join(" ")+".");
+    desc = `Further out = ${mode==="def"?"takes":"deals"} more damage. ` + series.map(s=>`<b style="color:${s.color}">${s.name}</b>`).join(" vs ") + ".";
+    head = series.map(s=>`<span><b style="color:${s.color}">${s.name}</b> ${s.els.map(d=>elIco(d,26)).join("")}</span>`).join("");
+    legend = series.map(s=>`<span style="color:${s.color}"><i class="fill" style="border-color:${s.color}"></i>${s.name}</span>`).join("");
   }
-  const legend = mode==="def"
-    ? [["resists","#15803d"],["normal","#94a3b8"],["weak to","#c2410c"]]
-    : [["strong against","#15803d"],["normal","#94a3b8"],["resisted by","#c2410c"]];
-  return `<section class="card radar"><div class="rhead"><h2>${mode==="def"?"Defence":"Attack"}</h2>
-    <div class="rbadges">${defs.map(d=>`<span>${elIco(d,30)}${d}</span>`).join("")}</div></div>
+  return `<section class="card radar"><div class="rhead"><h2>${mode==="def"?"Defence":"Attack"}</h2><div class="rbadges">${head}</div></div>
     <p class="rdesc">${desc}</p>${svg}
-    <div class="legend">${legend.map(l=>`<span><i style="border-color:${l[1]}"></i>${l[0]}</span>`).join("")}</div></section>`;
+    <p class="tipline">Tap an element icon to see how its number is worked out.</p>
+    <div class="legend">${legend}</div></section>`;
 }
 
-/* ---------- results ---------- */
-const fmt = m => "×"+fmtM(m);
+/* tap an icon: show the maths */
+function explain(mode, t){
+  const multi = lastSeries.length>1;
+  return lastSeries.map(s => {
+    const who = multi ? `<b style="color:${s.color}">${s.name}</b>: ` : "";
+    if(mode==="def"){
+      const parts = s.els.map(e => `${t} hits ${e} for ×${fmtM(mult(t,e))}`), tot = s.def[t];
+      const verdict = tot>1.001 ? `Weak to ${t}.` : tot<0.999 ? `Resists ${t}.` : `Takes normal damage from ${t}.`;
+      return `${who}${parts.join(" and ")}${s.els.length>1?`, which multiply to ×${fmtM(tot)}`:""}. ${verdict}`;
+    }
+    const parts = s.els.map(e => `${e} hits ${t} for ×${fmtM(mult(e,t))}`), tot = s.atk[t];
+    return `${who}${parts.join(" and ")}${s.els.length>1?`. The best one counts, so ×${fmtM(tot)}`:""}.`;
+  }).join("<br>");
+}
+function showTip(g){
+  const card = g.closest(".radar"), line = card.querySelector(".tipline");
+  line.innerHTML = `<b>${g.dataset.t}</b> · ` + explain(g.dataset.mode, g.dataset.t); line.classList.add("on");
+}
+
+/* ---------- views ---------- */
 function monRow(a, v, rightHtml){
   return `<div class="mon">${portrait(a,v.file)}<span class="txt"><b>${a.name}</b>${v.n!=="Basic Form"?` <small>· ${v.n}</small>`:""}<br>
     <span class="meta">${v.el.map(e=>elIco(e,16)).join("")}${v.el.join(" / ")}${a.role!=="?"?` · ${ROLES[a.role]}`:""}${a.total?` · ${a.total} stats`:""}</span></span>${rightHtml}</div>`;
 }
 
-function render(){
-  const out = document.getElementById("out");
-  const defs = [t1,t2].filter(Boolean);
-  if(!defs.length){ out.innerHTML=""; return; }
-  const v = picked ? variantsOf(picked)[formIdx] : null;
-  const who = picked ? picked.name : defs.join(" / ");
-  let html = picked
-    ? `<div class="target">${portrait(picked,v.file,true)}<span>${picked.name}<br><small>${v.n}</small></span></div>`
+function singleView(i){
+  const ser = seriesOf(i), s = slots[i], defs = ser.els, v = ser.v;
+  lastSeries = [ser];
+  let html = s.picked
+    ? `<div class="target">${portrait(s.picked,v.file,true)}<span>${s.picked.name}<br><small>${v.n}</small></span></div>`
     : `<div class="target">${defs.join(" / ")}</div>`;
+  html += radar("def",[ser]) + radar("atk",[ser]);
 
-  const defVals = {}, atkVals = {};
-  TYPES.forEach(t => { defVals[t] = defs.reduce((p,d)=>p*mult(t,d),1); atkVals[t] = Math.max(...defs.map(e => mult(e,t))); });
-  html += radar("def", defVals, defs, who) + radar("atk", atkVals, defs, who);
-
-  const roleOk = a => roleFilter==="ALL" || a.role===roleFilter;
-  const notSelf = a => !(picked && a.name===picked.name);
-
+  const roleOk = a => roleFilter==="ALL" || a.role===roleFilter, notSelf = a => !(s.picked && a.name===s.picked.name);
   const pool = ROSTER.filter(a => roleOk(a) && notSelf(a)).map(a => {
     const best = variantsOf(a).map(x => ({v:x, s: against(x.el, defs)})).sort((x,y)=>y.s-x.s)[0];
     return {a, v:best.v, s:best.s};
@@ -483,11 +638,81 @@ function render(){
   if(safe.length) html += `<h2 class="sec">Tough against it</h2>
     <p class="hint">Aniimo that resist this target’s own elements, so they take reduced damage from its main attacks.</p>
     <div class="bring">${safe.map(x => monRow(x.a, x.v, `<span class="mx good">takes ${fmt(x.takes)}</span>`)).join("")}</div>`;
+  return html;
+}
 
+function compareView(){
+  const A = seriesOf(0,SLOT_COLORS[0],SLOT_FILLS[0]), B = seriesOf(1,SLOT_COLORS[1],SLOT_FILLS[1]);
+  lastSeries = [A,B];
+  const who = x => x.s.picked ? `${portrait(x.s.picked,x.v.file,true)}<span style="color:${x.color}">${x.name}<br><small>${x.v.n}</small></span>` : `<span style="color:${x.color}">${x.name}</span>`;
+  let html = `<div class="target">${who(A)}<span class="vsmark">vs</span>${who(B)}</div>`;
+  html += radar("def",[A,B]) + radar("atk",[A,B]);
+
+  const cls = (m,mode) => m>1.001 ? (mode==="def"?"bad":"good") : m<0.999 ? (mode==="def"?"good":"bad") : "mid";
+  const cell = (m,mode) => `<td class="${cls(m,mode)}">${fmt(m)}</td>`;
+  html += `<section class="card"><h2>Side by side</h2><div class="scroll"><table class="cmp"><thead>
+    <tr><th rowspan="2"></th><th colspan="2">Takes from this element</th><th colspan="2">Deals to this element</th></tr>
+    <tr><th style="color:${A.color}">${A.name}</th><th style="color:${B.color}">${B.name}</th><th style="color:${A.color}">${A.name}</th><th style="color:${B.color}">${B.name}</th></tr></thead><tbody>` +
+    ORDER.map(t => `<tr><th><span class="tt">${elIco(t,20)}${t}</span></th>${cell(A.def[t],"def")}${cell(B.def[t],"def")}${cell(A.atk[t],"atk")}${cell(B.atk[t],"atk")}</tr>`).join("") +
+    `</tbody></table></div></section>`;
+
+  const weak = x => TYPES.filter(t=>x.def[t]>1.001), res = x => TYPES.filter(t=>x.def[t]<0.999);
+  const shared = ORDER.filter(t => A.def[t]>1.001 && B.def[t]>1.001);
+  const aCovers = ORDER.filter(t => B.def[t]>1.001 && A.def[t]<0.999), bCovers = ORDER.filter(t => A.def[t]>1.001 && B.def[t]<0.999);
+  const onlyA = ORDER.filter(t => A.atk[t]>1.001 && !(B.atk[t]>1.001)), onlyB = ORDER.filter(t => B.atk[t]>1.001 && !(A.atk[t]>1.001));
+  const nm = x => `<b style="color:${x.color}">${x.name}</b>`;
+  const li = (txt, list) => `<li>${txt}${list.length ? `<div style="margin-top:6px">${tags(list)}</div>` : ""}</li>`;
+  html += `<section class="card"><h2>Quick read</h2><ul class="quick">
+    <li>${nm(A)} has ${weak(A).length} weakness${weak(A).length===1?"":"es"} and ${res(A).length} resistance${res(A).length===1?"":"s"}. ${nm(B)} has ${weak(B).length} weakness${weak(B).length===1?"":"es"} and ${res(B).length} resistance${res(B).length===1?"":"s"}.</li>` +
+    li(shared.length ? "Both are weak to:" : "They share no weaknesses, so one can cover for the other.", shared) +
+    (aCovers.length ? li(`${nm(A)} resists what ${nm(B)} is weak to:`, aCovers) : "") +
+    (bCovers.length ? li(`${nm(B)} resists what ${nm(A)} is weak to:`, bCovers) : "") +
+    (onlyA.length ? li(`Only ${nm(A)} hits these for super effective damage:`, onlyA) : "") +
+    (onlyB.length ? li(`Only ${nm(B)} hits these for super effective damage:`, onlyB) : "") +
+    `</ul></section>`;
+  return html;
+}
+
+function render(){
+  const out = document.getElementById("out");
+  const active = compare ? [0,1].filter(i => elsOf(slots[i]).length) : (elsOf(slots[0]).length ? [0] : []);
+  if(!active.length){ out.innerHTML = ""; lastSeries = []; return; }
+  let html = `<div class="toolbar"><button type="button" class="copy" id="copyLink">Copy link</button></div>`;
+  if(compare && active.length===2) html += compareView();
+  else {
+    html += singleView(active[0]);
+    if(compare) html += `<p class="hint">Pick Aniimo ${active[0]===0?"B":"A"} above to compare.</p>`;
+  }
   out.innerHTML = html;
   out.querySelectorAll("#roles .chip").forEach(b => b.onclick = () => { roleFilter=b.dataset.role; render(); });
 }
+const outEl = document.getElementById("out");
+outEl.addEventListener("click", e => {
+  const c = e.target.closest("#copyLink");
+  if(c){
+    const url = location.href, done = () => { c.textContent = "Copied!"; setTimeout(()=>{ c.textContent = "Copy link"; }, 1500); };
+    (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(url) : Promise.reject()).then(done).catch(() => window.prompt("Copy this link:", url));
+    return;
+  }
+  const g = e.target.closest(".tipg"); if(g) showTip(g);
+});
+outEl.addEventListener("keydown", e => { if(e.key==="Enter" || e.key===" "){ const g = e.target.closest && e.target.closest(".tipg"); if(g){ e.preventDefault(); showTip(g); } }});
 
+/* ---------- theme ---------- */
+const themeBtn = document.getElementById("themeBtn");
+const SUN = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg>`;
+const MOON = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 3.2a9 9 0 1 0 5.3 12.9A7.2 7.2 0 0 1 15.5 3.2z"/></svg>`;
+function setTheme(t, save){
+  document.documentElement.dataset.theme = t;
+  themeBtn.innerHTML = t==="dark" ? SUN : MOON;
+  themeBtn.setAttribute("aria-label", t==="dark" ? "Switch to light theme" : "Switch to dark theme");
+  if(save){ try{ localStorage.setItem("aniimo-theme", t); }catch(e){} }
+}
+let savedTheme = null; try{ savedTheme = localStorage.getItem("aniimo-theme"); }catch(e){}
+setTheme(savedTheme || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme==="dark" ? "light" : "dark", true);
+
+/* ---------- full chart + init ---------- */
 (function(){
   let h = "<tr><th>Atk ↓ / Def →</th>" + TYPES.map(t=>`<th>${t.slice(0,4)}</th>`).join("") + "</tr>";
   TYPES.forEach(a => {
@@ -495,6 +720,7 @@ function render(){
   });
   document.getElementById("chart").innerHTML = h;
 })();
+loadHash(); sync();
 </script>
 </body>
 </html>
