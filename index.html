@@ -240,17 +240,8 @@ footer a{color:var(--link)}
     <div class="scroll"><table class="big" id="chart"></table></div>
   </details>
 
-  <p class="note">
-    Multipliers: 1.6× super effective, 1× neutral, 0.625× resisted. Dual types multiply both
-    elements together. The element chart is from MetaBot. Aniimo, forms and form elements come
-    from the game files, so the list includes entries that may not be obtainable yet. Roles and
-    stats are community figures and are blank for newer entries. The game calls Electric
-    “Lightning,” Rock “Earth,” and Holy “Light.” Edit <code>CHART</code> or <code>ROSTER</code>
-    in this file to correct anything.
-  </p>
 </main>
-<footer>Unofficial fan tool. Not affiliated with Polaris Institute or Aniimo.
-  <a href="https://aniimo.com" target="_blank" rel="noopener noreferrer">aniimo.com</a></footer>
+<footer>Unofficial fan tool. Not affiliated with Pawprint Interactive Entertainment or Aniimo.</footer>
 
 <script>
 const TYPES = ["Fire","Water","Grass","Lightning","Ice","Earth","Wind","Light","Dark"];
@@ -303,23 +294,23 @@ const portrait = (a, file, big) => file
 const ROLES = {D:"DPS",B:"Break",S:"Support",H:"Heal",R:"Regen","?":"Role n/a"};
 const ROSTER = `Celestis|Dark|D|429|10011|
 Stellarys|Dark|D|505|10012|Rainstorm:Water,Dark:1001201;Prismana:Ice,Dark:1001202
-Helmut|Dark|B|339|10021|Snowfield:Ice,Dark:1002101;Mountain Woods:Dark:1002102
+Helmut|Dark|B|339|10021|Snowfield:Ice,Dark:1002101;Timberline:Dark:1002102
 Helmwhelp|Wind|B|489|10022|Mountain:Wind:1002201
 Helgon|Wind|B|543|10023|Mountain:Wind:1002301
 Jawling|Wind|B|407|10024|Mountain:Wind:1002401
 Infergon|Fire|D|505|10025|Prismana:Fire,Wind:1002503
-Pawney|Dark|D|505|10026|Snowfield:Ice,Dark:1002601;Mountain Woods:Dark:1002602;Prismana:Dark:1002603
-Rookey|Dark|B|540|10027|Snowfield:Ice,Dark:1002701;Mountain Woods:Dark:1002702
+Pawney|Dark|D|505|10026|Snowfield:Ice,Dark:1002601;Timberline:Dark:1002602;Prismana:Dark:1002603
+Rookey|Dark|B|540|10027|Snowfield:Ice,Dark:1002701;Timberline:Dark:1002702
 Wisptis|Dark|D|423|10031|Forest:Grass,Dark:1003101;Highland:Fire,Dark:1003103
 Ignitis|Dark|D|505|10032|Forest:Grass,Dark:1003201;Prismana:Fire,Dark:1003202;Highland:Fire,Dark:1003203
 Fulmintis|Lightning|D|520|10033|Prismana:Lightning,Light:1003305
-Skippy|Water|H|402|10041|Sea of Flowers:Water:1004101;Snowfield:Ice,Water:1004102
-Pranky|Water|H|482|10042|Sea of Flowers:Water:1004201;Snowfield:Ice,Water:1004202
-Glacy|Ice,Water|H|535|10043|Sea of Flowers:Ice,Water:1004301;Snowfield:Ice,Water:1004302;Prismana:Water,Light:1004303
+Skippy|Water|H|402|10041|Flowerfield:Water:1004101;Snowfield:Ice,Water:1004102
+Pranky|Water|H|482|10042|Flowerfield:Water:1004201;Snowfield:Ice,Water:1004202
+Glacy|Ice,Water|H|535|10043|Flowerfield:Ice,Water:1004301;Snowfield:Ice,Water:1004302;Prismana:Water,Light:1004303
 Leafy|Water,Grass|R|535|10045|
-Emberpup|Fire|D|382|10051|Highland:Fire,Earth:1005101;Mountain Woods:Fire:1005104
-Flameruff|Fire|D|456|10052|Highland:Fire,Earth:1005201;Mountain Woods:Fire:1005204
-Scorchhowl|Fire|D|511|10053|Highland:Fire,Earth:1005301;Thunderstorm:Lightning,Fire:1005302;Prismana:Fire:1005303;Mountain Woods:Fire:1005304
+Emberpup|Fire|D|382|10051|Highland:Fire,Earth:1005101;Timberline:Fire:1005104
+Flameruff|Fire|D|456|10052|Highland:Fire,Earth:1005201;Timberline:Fire:1005204
+Scorchhowl|Fire|D|511|10053|Highland:Fire,Earth:1005301;Thunderstorm:Lightning,Fire:1005302;Prismana:Fire:1005303;Timberline:Fire:1005304
 Inferlupa|Fire,Dark|B|541|10055|Prismana:Fire,Dark:1005503
 Besauce|Lightning|R|538|10122|
 Bonesky|Ice|D|377|10131|Nighttime:Ice,Dark:1013102
@@ -343,14 +334,14 @@ Shelly|Water|D|382|10191|
 Sheldon|Water|D|458|10192|
 Sherro|Water|D|509|10194|Thunderstorm:Water,Lightning:1019401;Prismana:Water,Light:1019402
 Hummin|Grass|B|467|10201|Mountain:Grass:1020101
-Hexxin~Witchin|Grass,Dark|R|542|10203|Mountain:Grass,Dark:1020301;Prismana:Grass,Dark:1020302
+Witchin~Hexxin|Grass,Dark|R|542|10203|Mountain:Grass,Dark:1020301;Prismana:Grass,Dark:1020302
 Tuckin|Grass|B|550|10207|Mountain:Grass,Earth:1020701
-Iris|Grass|D|397|10211|Highland:Grass:1021101;Forest:Grass:1021102;Grassland:Grass:1021103;Prismana:Grass:1021104;Plateau:Grass:1021105;Mountain Woods:Grass:1021106
-Irisal|Grass|D|504|10212|Highland:Grass:1021201;Forest:Grass:1021202;Grassland:Grass:1021203;Prismana:Grass:1021204;Plateau:Grass:1021205;Mountain Woods:Grass:1021206
-Bolty|Lightning|B|450|10221|Mountain Woods:Lightning:1022102
-Blazen|Lightning|B|530|10222|Prismana:Lightning,Dark:1022201;Mountain Woods:Lightning:1022202
-Flutternym|Wind|H|437|10231|Sea of Flowers:Grass,Wind:1023101;Nighttime:Wind,Dark:1023102;Mountain Woods:Earth,Wind:1023103
-Gracewing|Wind|H|532|10232|Sea of Flowers:Grass,Wind:1023201;Nighttime:Wind,Dark:1023202;Mountain Woods:Earth,Wind:1023203
+Iris|Grass|D|397|10211|Highland:Grass:1021101;Forest:Grass:1021102;Grassland:Grass:1021103;Prismana:Grass:1021104;Plateau:Grass:1021105;Timberline:Grass:1021106
+Irisal|Grass|D|504|10212|Highland:Grass:1021201;Forest:Grass:1021202;Grassland:Grass:1021203;Prismana:Grass:1021204;Plateau:Grass:1021205;Timberline:Grass:1021206
+Bolty|Lightning|B|450|10221|Timberline:Lightning:1022102
+Blazen|Lightning|B|530|10222|Prismana:Lightning,Dark:1022201;Timberline:Lightning:1022202
+Flutternym|Wind|H|437|10231|Flowerfield:Grass,Wind:1023101;Nighttime:Wind,Dark:1023102;Timberline:Earth,Wind:1023103
+Gracewing|Wind|H|532|10232|Flowerfield:Grass,Wind:1023201;Nighttime:Wind,Dark:1023202;Timberline:Earth,Wind:1023203
 Nimbi|Wind|S|451|10261|Rainstorm:Lightning,Wind:1026101;Cloudmist:Wind:1026102;Plateau:Ice,Wind:1026105
 Turbo|Wind|S|518|10262|Rainstorm:Lightning,Wind:1026201;Cloudmist:Wind:1026202;Prismana:Wind,Dark:1026204;Plateau:Ice,Wind:1026205
 Dreaple|Dark|S|520|10263|
@@ -364,17 +355,17 @@ Fenmane|Lightning|D|505|10293|Prismana:Lightning,Light:1029301
 Budsquire|Grass|D|428|10321|Towerwood:Grass:1032103
 Thornblade|Grass|D|509|10323|Thunderstorm:Lightning,Grass:1032301;Prismana:Water,Grass:1032302;Towerwood:Grass:1032303
 Melloblum|Grass|S|517|10324|Prismana:Grass,Light:1032402
-Sparki|Fire|R|435|10331|Highland:Fire:1033101;Forest:Fire:1033102;Sea of Flowers:Fire:1033103
-Flamerion|Fire|R|517|10333|Highland:Fire:1033301;Forest:Fire:1033302;Sea of Flowers:Fire:1033303
+Sparki|Fire|R|435|10331|Highland:Fire:1033101;Forest:Fire:1033102;Flowerfield:Fire:1033103
+Flamerion|Fire|R|517|10333|Highland:Fire:1033301;Forest:Fire:1033302;Flowerfield:Fire:1033303
 Dewy|Dark|S|441|10351|
 Fragrancier|Dark|S|519|10352|
 Helion|Light|D|514|10361|
-Soleon|Light|?|0|10363|
+Soleon|Light|D|559|10363|
 Lunara|Light|D|514|10371|
-Fennelun|Light|?|0|10373|
+Fennelun|Light|D|514|10373|
 Reefish|Earth,Water|?|0|10381|Rainstorm:Earth:1038103
 Coraliz|Earth,Water|?|0|10383|Rainstorm:Earth:1038303
-Jabster|Water|?|0|10403|
+Jabster|Water|?|520|10403|
 Malangel|Ice|?|0|10421|
 Malevsera|Ice|?|0|10423|
 Cozite|Earth|S|448|10431|
@@ -384,9 +375,9 @@ Eklue|Wind|S|510|10443|
 Baleetle|Earth|D|437|10451|Snowfield:Ice,Earth:1045101
 Waleetle|Earth|D|516|10453|Snowfield:Ice,Earth:1045301;Prismana:Earth,Dark:1045302
 Bouldus|Earth|S|516|10454|Snowfield:Ice,Earth:1045401
-Pomegg|Grass|B|455|10471|Snowfield:Ice,Grass:1047101;Highland:Grass:1047102;Sea of Flowers:Grass:1047103
+Pomegg|Grass|B|455|10471|Snowfield:Ice,Grass:1047101;Highland:Grass:1047102;Flowerfield:Grass:1047103
 Dazmand|Lightning|S|522|10474|
-Pomawk|Grass|B|540|10475|Snowfield:Ice,Grass:1047501;Highland:Grass:1047502;Sea of Flowers:Grass:1047503
+Pomawk|Grass|B|540|10475|Snowfield:Ice,Grass:1047501;Highland:Grass:1047502;Flowerfield:Grass:1047503
 Fahloo|Water|R|459|10481|
 Erlath|Water|R|540|10483|
 Cubbo|Earth|D|435|10501|
@@ -397,9 +388,8 @@ Bubbeep|Grass,Water|?|0|10581|
 Glameep|Grass,Water|?|0|10583|Prismana:Grass,Dark:1058301
 Popapus|Water|?|0|10621|
 Gachapus|Water|?|0|10623|
-Sparkelf|Fire|?|0|69993|Prismana:Fire:6999301
-Somniwing|Wind,Grass|R|538||
-Little Fire Spirit|Fire|S|517||`.trim().split("\n").map(l => {
+Sparkelf~Little Fire Spirit|Fire|S|517|69993|Prismana:Fire:6999301
+Somniwing|Wind,Grass|R|538||`.trim().split("\n").map(l => {
   const [n, el, role, total, file, forms] = l.split("|");
   const [name, alias] = n.split("~");
   return {name, alias: alias||"", el: el.split(","), role, total: +total, file,
