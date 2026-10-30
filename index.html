@@ -363,11 +363,11 @@ Helion|Light|D|514|10361|
 Soleon|Light|D|559|10363|
 Lunara|Light|D|514|10371|
 Fennelun|Light|D|514|10373|
-Reefish|Earth,Water|?|0|10381|Rainstorm:Earth:1038103
-Coraliz|Earth,Water|?|0|10383|Rainstorm:Earth:1038303
-Jabster|Water|?|520|10403|
-Malangel|Ice|?|0|10421|
-Malevsera|Ice|?|0|10423|
+Reefish|Earth,Water|R|0|10381|Rainfall:Earth:1038103
+Coraliz|Earth,Water|R|0|10383|Rainfall:Earth:1038303
+Jabster|Ice,Dark|B|520|10403|Rainfall:Ice,Water:;Prismana:Ice,Lightning:
+Malangel|Ice|D|515|10421|
+Malevsera|Ice|D|525|10423|
 Cozite|Earth|S|448|10431|
 Bailite|Earth|S|514|10433|
 Eko|Wind|S|427|10441|
@@ -384,12 +384,39 @@ Cubbo|Earth|D|435|10501|
 Grizbo|Earth|D|506|10503|Prismana:Earth,Dark:1050301
 Squarrel|Fire|B|455|10511|
 Squashel|Fire|B|548|10512|
-Bubbeep|Grass,Water|?|0|10581|
-Glameep|Grass,Water|?|0|10583|Prismana:Grass,Dark:1058301
-Popapus|Water|?|0|10621|
-Gachapus|Water|?|0|10623|
+Bubbeep|Grass,Water|H|0|10581|
+Glameep|Grass,Water|H|0|10583|Tempest:Grass,Wind:;Prismana:Grass,Dark:1058301
+Popapus|Water|D|0|10621|
+Gachapus|Water|D|0|10623|Prismana:Water,Dark:
 Sparkelf~Little Fire Spirit|Fire|S|517|69993|Prismana:Fire:6999301
-Somniwing|Wind,Grass|R|538||`.trim().split("\n").map(l => {
+Somniwing|Wind,Grass|R|538||
+Cheekie|Ice|B|488||
+Wavwal|Ice|B|575||
+Hypnowl|Wind|R|0||
+Mesmerowl|Wind|R|0||
+Hypnyto|Wind|D|0||Prismana:Wind,Light:
+Dewlop|Water|S|0||Waterfall:Water:
+Dewple|Water|S|0||Waterfall:Water:
+Coinwisp|Dark|R|0||
+Pouchwisp|Dark|R|0||Prismana:Dark:
+Sugarfish|Ice|R|0||
+Sugarslime|Ice|R|0||
+Sugartini|Ice|S|0||Prismana:Ice,Water:
+Lilipole|Water|B|0||
+Scrubbit|Water|B|0||Rainfall:Water:
+Salabask|Grass,Water|S|0||
+Crocobask|Grass,Water|S|0||
+Puffby|Wind|B|0||
+Buffby|Wind|B|0||
+Royalby|Wind|R|0||Prismana:Wind,Light:
+Saws|Water|D|0||
+Whirlbite|Water|D|0||Prismana:Water,Dark:
+Prawnch|Ice|B|0||
+Jeglid|Water|B|0||Tempest:Water,Wind:
+Jeburst|Water|B|542||Tempest:Water,Wind:;Prismana:Water,Dark:
+Ekrim|Dark|B|0||Prismana:Fire,Dark:
+Hoptail|Wind,Lightning|D|0||
+Jaguaraun|Lightning|B|0||`.trim().split("\n").map(l => {
   const [n, el, role, total, file, forms] = l.split("|");
   const [name, alias] = n.split("~");
   return {name, alias: alias||"", el: el.split(","), role, total: +total, file,
